@@ -8,6 +8,7 @@ import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserController } from '@controller/user';
 import { AppOrm } from '@libs/core/orm';
+import { NotificationsController } from '@controller/notifications';
 
 export function bindContainer(container: Container): void {
   /* #region Singleton Class */
@@ -24,5 +25,7 @@ export function bindContainer(container: Container): void {
     .whenTargetNamed(SERVICE_NAME.controllers.user);
   container.bind<PostsController>(SERVICE_IDENTIFIER.Controller).to(PostsController)
     .whenTargetNamed(SERVICE_NAME.controllers.posts);
+  container.bind<NotificationsController>(SERVICE_IDENTIFIER.Controller).to(NotificationsController)
+    .whenTargetNamed(SERVICE_NAME.controllers.notifications);
   /* #endregion */
 }

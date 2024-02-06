@@ -8,6 +8,7 @@ const SERVICE_NAME = {
     root: 'root',
     user: 'user',
     posts: 'posts',
+    notifications: 'notifications',
   },
 };
 
