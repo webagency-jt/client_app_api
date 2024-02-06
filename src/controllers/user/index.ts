@@ -7,6 +7,7 @@ import { Controller } from '@libs/decorators/controller';
 import * as hono from 'hono';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { AppOrm } from '@libs/core/orm';
+import { zValidator } from '@hono/zod-validator';
 
 @injectable()
 export class UserController implements IController {
@@ -14,6 +15,11 @@ export class UserController implements IController {
     @inject(SERVICE_IDENTIFIER.App) private server: App,
     @inject(SERVICE_IDENTIFIER.Orm) private orm: AppOrm,
   ) { }
+
+
+  public setup(): any {
+    this.create();
+  }
 
   @Controller({
     method: 'post',
@@ -31,55 +37,24 @@ export class UserController implements IController {
       },
     },
   })
-  public async setup(ctx?: hono.Context): Promise<any> {
+  private async create(ctx?: hono.Context) {
+    // TODO: ajouter la possibilite de valider les requêtes entrante
+    const test = zValidator('json', {}, (result, c) => {
+      if (!result.success) {
+        return c.text('Invalid!', 400);
+      }
+    });
+
     isContextDefined(ctx);
     if (ctx) {
       const body: any = await ctx.req.raw.json();
 
-      // Creation d'un user avec ses relations
-      // const user = await this.orm.client.user.create({
-      //   data: {
-      //     email: 'mathys@smartpublic.fr',
-      //     password: 'salut',
-      //     userInformations: {
-      //       create: {
-      //         firstname: 'coucou',
-      //       },
-      //     },
-      //   },
-      // });
-
-      // Creation d'un user sans userInformations
-      // const user = await this.orm.client.user.create({
-      //   data: {
-      //     email: 'mathys@smartpublic.fr',
-      //     password: 'salut',
-      //   },
-      // });
-
-      // Ajout des informations user
-      // const user = await this.orm.client.userInformations.create({
-      //   data: {
-      //     userId: '65c249d08353246b98820eb3',
-      //     firstname: 'michel',
-      //   },
-      // });
-
-      // Récupération d'un user avec toutes ses données et ses relations
-      const user = await this.orm.client.user.findUnique({
-        where: {
-          email: 'mtheoladfe@smartpublic.fr',
-        },
-        include: {
-          userInformations: true,
-        },
-      });
-
       return ctx.json({
         age: 205,
-        name: user,
+        name: 'dslaut',
       });
     };
-
   }
+
+
 }
