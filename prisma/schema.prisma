@@ -15,6 +15,7 @@ model User {
   userInformations     UserInformations?
   userSettings         UserSettings?
   userNotifications    Notifications?
+  userSites            Sites[]
 }
 
 model UserSettings {
@@ -50,9 +51,20 @@ model UserInformations {
 }
 
 model Sites {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  link      String
-  documents Documents[]
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  link          String
+  documents     Documents[]
+  interventions Interventions[]
+  solutions     Solutions[]
+  detail        SitesDetail?
+  user          User            @relation(fields: [userId], references: [id])
+  userId        String          @db.ObjectId
+}
+
+model SitesDetail {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  siteId String? @unique @db.ObjectId
+  site   Sites?  @relation(fields: [siteId], references: [id])
 }
 
 model Documents {
@@ -62,7 +74,22 @@ model Documents {
 }
 
 model Interventions {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  link               String
+  start_intervention DateTime
+  end_intervention   DateTime?
+  intern_description String
+  global_description String
+  site               Sites     @relation(fields: [siteId], references: [id])
+  siteId             String    @db.ObjectId
+}
+
+model Solutions {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  link    String
+  icon    String
+  Sites   Sites?  @relation(fields: [sitesId], references: [id])
+  sitesId String? @db.ObjectId
 }
 
 enum Lang {
