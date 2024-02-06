@@ -8,14 +8,13 @@ datasource db {
 }
 
 model User {
-  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
-  email                String            @unique
-  password             String?
-  usersNotificationsId String?           @db.ObjectId
-  userInformations     UserInformations?
-  userSettings         UserSettings?
-  userNotifications    Notifications?
-  userSites            Sites[]
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  email         String            @unique
+  password      String?
+  informations  UserInformations?
+  settings      UserSettings?
+  notifications Notifications?
+  sites         Sites[]
 }
 
 model UserSettings {
@@ -26,13 +25,14 @@ model UserSettings {
 }
 
 model Notifications {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  status     Status   @default(inProgress)
-  content    String?
-  allUser    Boolean  @default(false)
-  userId     String?  @unique @db.ObjectId
-  user       User?    @relation(fields: [userId], references: [id])
-  created_at DateTime
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  status           Status   @default(inProgress)
+  content          String?
+  broadcast_to_all Boolean  @default(false)
+  // Optional because you can create global notification
+  userId           String?  @unique @db.ObjectId
+  user             User?    @relation(fields: [userId], references: [id])
+  created_at       DateTime
 }
 
 model UserInformations {
@@ -57,25 +57,34 @@ model Sites {
   interventions Interventions[]
   solutions     Solutions[]
   detail        SitesDetail?
-  user          User            @relation(fields: [userId], references: [id])
   userId        String          @db.ObjectId
+  user          User            @relation(fields: [userId], references: [id])
 }
 
 model SitesDetail {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  siteId String? @unique @db.ObjectId
-  site   Sites?  @relation(fields: [siteId], references: [id])
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  next_monthly_payment  DateTime
+  monthly_payment_price Float
+  signature_date        DateTime
+  // Mise en service du produit
+  launch_date           DateTime
+  current_seat_number   Int      @default(0)
+  max_seat_number       Int      @default(3)
+  siteId                String?  @unique @db.ObjectId
+  site                  Sites?   @relation(fields: [siteId], references: [id])
 }
 
 model Documents {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
-  sites   Sites  @relation(fields: [sitesId], references: [id])
+  url     String
   sitesId String @db.ObjectId
+  sites   Sites  @relation(fields: [sitesId], references: [id])
 }
 
 model Interventions {
   id                 String    @id @default(auto()) @map("_id") @db.ObjectId
   link               String
+  title              String
   start_intervention DateTime
   end_intervention   DateTime?
   intern_description String
