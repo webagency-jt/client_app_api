@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
+  email                String            @unique
+  password             String?
+  usersNotificationsId String?           @db.ObjectId
+  userInformations     UserInformations?
+  userSettings         UserSettings?
+  userNotifications    Notifications?
+}
+
+model UserSettings {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
+  lang   Lang   @default(fr)
+}
+
+model Notifications {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  status     Status   @default(inProgress)
+  content    String?
+  allUser    Boolean  @default(false)
+  userId     String?  @unique @db.ObjectId
+  user       User?    @relation(fields: [userId], references: [id])
+  created_at DateTime
+}
+
+model UserInformations {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String  @unique @db.ObjectId
+  firstname   String?
+  lastname    String?
+  phoneNumber String?
+  siret       String?
+  tva         Int?
+  city        String?
+  State       String?
+  zip         String?
+  adress      String?
+}
+
+model Sites {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  link      String
+  documents Documents[]
+}
+
+model Documents {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  sites   Sites  @relation(fields: [sitesId], references: [id])
+  sitesId String @db.ObjectId
+}
+
+model Interventions {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+enum Lang {
+  fr
+  en
+}
+
+enum Status {
+  done
+  inProgress
+}
