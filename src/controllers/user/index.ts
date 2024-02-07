@@ -1,19 +1,20 @@
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { z } from '@hono/zod-openapi';
-import { inject, injectable } from 'inversify';
-import { IController } from '..';
 import { App } from '@libs/core/server';
 import { Controller } from '@libs/decorators/controller';
-import * as hono from 'hono';
+import { IController } from '..';
+import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
+import { inject, injectable, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
-import { AppOrm } from '@libs/core/orm';
-import { zValidator } from '@hono/zod-validator';
+import * as hono from 'hono';
+import { IUserInput, UserInputSchema, UserSchema } from '@libs/user';
+import { SERVICE_NAME } from '@config/ioc/service-name';
+import { UserRepository } from '@libs/user/user.repository';
 
+// Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
 export class UserController implements IController {
   public constructor(
     @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Orm) private orm: AppOrm,
+    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_repository) private userRepository: UserRepository,
   ) { }
 
 
@@ -23,38 +24,34 @@ export class UserController implements IController {
 
   @Controller({
     method: 'post',
-    path: '/user',
+    path: '/users/{id}',
+    request: {
+      body: {
+        content: {
+          // Validation de l'input
+          'application/json': {
+            schema: UserInputSchema,
+          },
+        },
+      },
+    },
     responses: {
       200: {
-        description: 'Respond a message',
         content: {
           'application/json': {
-            schema: z.object({
-              message: z.string(),
-            }),
+            // Validation de l'output
+            schema: UserSchema,
           },
         },
       },
     },
   })
-  private async create(ctx?: hono.Context) {
-    // TODO: ajouter la possibilite de valider les requêtes entrante
-    const test = zValidator('json', {}, (result, c) => {
-      if (!result.success) {
-        return c.text('Invalid!', 400);
-      }
-    });
-
+  private async create(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
-      const body: any = await ctx.req.raw.json();
-
-      return ctx.json({
-        age: 205,
-        name: 'dslaut',
-      });
+      const body = await ctx.req.json() as IUserInput;
+      const userCreated = await this.userRepository.create(body);
+      return ctx.json(userCreated);
     };
   }
-
-
 }

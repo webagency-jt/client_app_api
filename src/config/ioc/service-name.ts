@@ -10,6 +10,9 @@ const SERVICE_NAME = {
     posts: 'posts',
     notifications: 'notifications',
   },
+  libs: {
+    user_repository: 'user_repository',
+  },
 };
 
 export { SERVICE_NAME };

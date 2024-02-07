@@ -9,6 +9,7 @@ import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserController } from '@controller/user';
 import { AppOrm } from '@libs/core/orm';
 import { NotificationsController } from '@controller/notifications';
+import { UserRepository } from '@libs/user/user.repository';
 
 export function bindContainer(container: Container): void {
   /* #region Singleton Class */
@@ -16,6 +17,11 @@ export function bindContainer(container: Container): void {
   container.bind<Config>(SERVICE_IDENTIFIER.Config).to(Config).inSingletonScope();
   container.bind<AppLogger>(SERVICE_IDENTIFIER.Logger).to(AppLogger).inSingletonScope();
   container.bind<AppOrm>(SERVICE_IDENTIFIER.Orm).to(AppOrm).inSingletonScope();
+  /* #endregion */
+
+  /* #region Libs */
+  container.bind<UserRepository>(SERVICE_IDENTIFIER.Libs).to(UserRepository).inSingletonScope()
+    .whenTargetNamed(SERVICE_NAME.libs.user_repository);
   /* #endregion */
 
   /* #region Controller */

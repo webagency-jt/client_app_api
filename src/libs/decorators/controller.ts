@@ -1,5 +1,6 @@
 import { createRoute } from '@hono/zod-openapi';
-import { HonoRequest } from 'hono';
+import { App } from '@libs/core/server';
+import { StatusCodes } from 'http-status-codes';
 
 // Find a way to type the option to the following
 // <P extends string, R extends Omit<RouteConfig, 'path'> & {path: P;}>;
@@ -9,12 +10,23 @@ export function Controller(options: any) {
     const originalMethod = descriptor.value;
     descriptor.value = function () {
       // Access to property server from caller
-      const server = Reflect.get(this, 'server');
+      const server: App = Reflect.get(this, 'server');
       // Define route
       const route = createRoute(options);
 
-      return server.hono.openapi(route, (ctx: HonoRequest) => {
+      return server.hono.openapi(route, (ctx) => {
         return originalMethod.call(this, ctx);
+      }, (result, c) => {
+        if (!result.success) {
+          console.log(result.error);
+          return c.json(
+            {
+              code: StatusCodes.BAD_REQUEST,
+              message: result.error,
+            },
+            StatusCodes.BAD_REQUEST
+          );
+        }
       });
     };
     // Return descriptor
