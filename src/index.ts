@@ -1,19 +1,22 @@
 // !!Always import reflect metadata first
 import 'reflect-metadata';
 import 'dotenv/config';
-import { App } from '@libs/core/server';
-import { AppLogger } from '@libs/core/logger';
+import { App } from '@libs/core/server/server';
+import { AppLogger } from '@libs/core/logger/logger';
 import { Config, ENV_ENUM } from '@config/config';
 import { ControllerRoot } from './controllers';
+import { HTTPException } from 'hono/http-exception';
+import { Prisma } from '@prisma/client';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
+import { SERVICE_NAME } from '@config/ioc/service-name';
 import { cors } from 'hono/cors';
 import { csrf } from 'hono/csrf';
 import { iocContainer } from '@config/ioc/container';
 import { logger } from 'hono/logger';
+import { mapPrismaClientErrors, isErrorReturnGuard } from '@libs/errors/prisma.error';
 import { sentry } from '@hono/sentry';
 import { swaggerUI } from '@hono/swagger-ui';
-import { SERVICE_NAME } from '@config/ioc/service-name';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 // Initialize Hono
 const app = iocContainer.get<App>(SERVICE_IDENTIFIER.App).hono;
@@ -79,6 +82,18 @@ app.use(
 // Error Handling
 app.onError((err, c) => {
   appLogger.pino.error(err);
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
+
+  if (err instanceof Prisma.PrismaClientKnownRequestError || err instanceof Prisma.PrismaClientUnknownRequestError) {
+    const prismaError = mapPrismaClientErrors(err);
+    if (isErrorReturnGuard(prismaError)) {
+      c.status(prismaError.httpCode);
+      return c.json(prismaError);
+    }
+  }
+
   return c.text(ReasonPhrases.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
 });
 
