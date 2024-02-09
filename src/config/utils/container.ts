@@ -1,15 +1,15 @@
-import { App } from '@libs/core/server';
-import { AppLogger } from '@libs/core/logger';
 import { Config } from '@config/config';
-import { Container } from 'inversify';
-import { ControllerRoot } from '@controller/index';
-import { PostsController } from '@controller/posts';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
-import { UserController } from '@controller/user';
-import { AppOrm } from '@libs/core/orm';
-import { NotificationsController } from '@controller/notifications';
+import { ControllerRoot } from '@controller/index';
+import { NotificationsController } from '@controller/notifications/notifications.controller';
+import { PostsController } from '@controller/posts/posts.controller';
+import { UserController } from '@controller/user/user.controller';
+import { AppLogger } from '@libs/core/logger/logger';
+import { AppOrm } from '@libs/core/orm/orm';
+import { App } from '@libs/core/server/server';
 import { UserRepository } from '@libs/user/user.repository';
+import { Container } from 'inversify';
 
 export function bindContainer(container: Container): void {
   /* #region Singleton Class */

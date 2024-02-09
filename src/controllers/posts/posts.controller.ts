@@ -1,22 +1,21 @@
-
-import { inject, injectable } from 'inversify';
-import { z } from 'zod';
+import * as hono from 'hono';
+import { App } from '@libs/core/server/server';
+import { Controller } from '@libs/decorators/controller';
 import { IController } from '..';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { App } from '@libs/core/server';
-import { Controller } from '@libs/decorators/controller';
-import * as hono from 'hono';
+import { injectable, inject } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
+import { z } from 'zod';
 
 @injectable()
-export class NotificationsController implements IController {
+export class PostsController implements IController {
   public constructor(
     @inject(SERVICE_IDENTIFIER.App) private server: App,
   ) { }
 
   @Controller({
     method: 'get',
-    path: '/notifications',
+    path: '/posts',
     responses: {
       200: {
         description: 'Respond a message',

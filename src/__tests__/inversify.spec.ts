@@ -1,8 +1,8 @@
 import 'reflect-metadata';
-import { beforeAll, describe, expect, it } from 'bun:test';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { AppLogger } from '@libs/core/logger';
+import { AppLogger } from '@libs/core/logger/logger';
 import { Container } from 'inversify';
+import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
+import { beforeAll, describe, expect, it } from 'bun:test';
 import { bindContainer } from '@config/utils/container';
 
 /**

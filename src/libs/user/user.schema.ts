@@ -1,21 +1,5 @@
 import { z } from '@hono/zod-openapi';
 
-export interface IUserInput {
-  username: string,
-  password: string,
-  email: string,
-}
-
-export interface IUser {
-  id: string;
-  email: string;
-  username: string;
-  password: string | null;
-}
-export function UserInputTypeGuard(userInput: unknown): userInput is IUserInput {
-  return true;
-}
-
 export const UserInputSchema = z.object({
   username: z.string().min(3),
   password: z

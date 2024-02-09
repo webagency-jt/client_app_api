@@ -1,13 +1,13 @@
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { UserController } from './user';
-import { inject, injectable, named } from 'inversify';
-import { SERVICE_NAME } from '@config/ioc/service-name';
-import { PostsController } from './posts';
 import * as hono from 'hono';
-import { NotificationsController } from './notifications';
+import { App } from '@libs/core/server/server';
 import { Controller } from '@libs/decorators/controller';
+import { NotificationsController } from './notifications/notifications.controller';
+import { PostsController } from './posts/posts.controller';
+import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
+import { SERVICE_NAME } from '@config/ioc/service-name';
+import { UserController } from './user/user.controller';
+import { injectable, inject, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
-import { App } from '@libs/core/server';
 
 export interface IController {
   // Where root will be loaded
