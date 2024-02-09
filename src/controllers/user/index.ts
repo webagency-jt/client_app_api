@@ -5,9 +5,11 @@ import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { inject, injectable, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import * as hono from 'hono';
-import { IUserInput, UserInputSchema, UserSchema } from '@libs/user';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserRepository } from '@libs/user/user.repository';
+import { IUserInput } from '@libs/user';
+import { UserInputSchema, UserSchema } from '@libs/user/user.schema';
+import { StatusCodes } from 'http-status-codes';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
@@ -44,13 +46,22 @@ export class UserController implements IController {
           },
         },
       },
+      409: {
+        content: {
+          'application/json': {
+            // Validation de l'output
+            schema: {},
+          },
+        },
+      },
     },
   })
   private async create(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
       const body = await ctx.req.json() as IUserInput;
-      const userCreated = await this.userRepository.create(body);
+      const { password, ...userCreated } = await this.userRepository.create(body);
+      ctx.status(StatusCodes.CREATED);
       return ctx.json(userCreated);
     };
   }
