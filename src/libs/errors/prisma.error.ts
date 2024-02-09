@@ -8,7 +8,7 @@ export type ErrorReturn = {
 };
 
 export function isErrorReturnGuard(object: any): object is ErrorReturn {
-  return object.message && object.httpCode;
+  return typeof object == 'object' && object?.message && object?.httpCode;
 }
 
 const traceRefer = '(see trace for more informations)';
