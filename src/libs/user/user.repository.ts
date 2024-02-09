@@ -4,7 +4,6 @@ import { inject, injectable } from 'inversify';
 import { IUserInput, IUser } from './user.interface';
 
 // TODO: voir pour utiliser ça pour authentifier le user : https://github.com/nextauthjs/next-auth
-// TODO: faire une fonction pour mapper les codes erreurs prisma
 @injectable()
 export class UserRepository {
 
