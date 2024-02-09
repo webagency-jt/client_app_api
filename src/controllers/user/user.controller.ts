@@ -10,6 +10,7 @@ import { UserInputSchema, UserSchema } from '@libs/user/user.schema';
 import { UserRepository } from '@libs/user/user.repository';
 import { injectable, inject, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
+import { exclude } from '@libs/user/user.util';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
@@ -61,9 +62,9 @@ export class UserController implements IController {
     if (ctx) {
       const body = await ctx.req.json() as IUserInput;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...userCreated } = await this.userRepository.create(body);
+      const createdUser = await this.userRepository.create(body);
       ctx.status(StatusCodes.CREATED);
-      return ctx.json(userCreated);
+      return ctx.json(exclude(createdUser, ['password']));
     };
   }
 }
