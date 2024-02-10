@@ -12,6 +12,7 @@ const SERVICE_NAME = {
   },
   libs: {
     user_repository: 'user_repository',
+    user_service: 'user_service',
   },
 };
 

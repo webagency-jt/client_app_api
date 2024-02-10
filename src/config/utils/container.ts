@@ -9,6 +9,7 @@ import { AppLogger } from '@libs/core/logger/logger';
 import { AppOrm } from '@libs/core/orm/orm';
 import { App } from '@libs/core/server/server';
 import { UserRepository } from '@libs/user/user.repository';
+import { UserService } from '@libs/user/user.service';
 import { Container } from 'inversify';
 
 export function bindContainer(container: Container): void {
@@ -20,8 +21,10 @@ export function bindContainer(container: Container): void {
   /* #endregion */
 
   /* #region Libs */
-  container.bind<UserRepository>(SERVICE_IDENTIFIER.Libs).to(UserRepository).inSingletonScope()
+  container.bind<UserRepository>(SERVICE_IDENTIFIER.Libs).to(UserRepository)
     .whenTargetNamed(SERVICE_NAME.libs.user_repository);
+  container.bind<UserService>(SERVICE_IDENTIFIER.Libs).to(UserService)
+    .whenTargetNamed(SERVICE_NAME.libs.user_service);
   /* #endregion */
 
   /* #region Controller */
