@@ -154,7 +154,9 @@ const PrismaClientErrorMap: { [key: string]: ErrorReturn; } = {
 export function mapPrismaClientErrors(error: unknown): ErrorReturn | unknown {
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (PrismaClientErrorMap[error.code]) {
-      return PrismaClientErrorMap[error.code];
+      const mappedError = PrismaClientErrorMap[error.code];
+      mappedError.detail = error.message;
+      return mappedError;
     }
     throw new Error(`Unknown prisma reference for code ${error.code}`);
   }
