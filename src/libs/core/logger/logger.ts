@@ -11,7 +11,7 @@ export class AppLogger {
   private _pino: PinoType;
 
   public constructor(
-    @inject(SERVICE_IDENTIFIER.Config) public config: Config,
+    @inject(SERVICE_IDENTIFIER.Config) private config: Config,
   ) {
     const env = this.config.get<ENV_ENUM>('ENV');
     if (env === ENV_ENUM.DEV) {

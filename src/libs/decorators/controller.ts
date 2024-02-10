@@ -1,5 +1,5 @@
 import { createRoute } from '@hono/zod-openapi';
-import { App } from '@libs/core/server';
+import { App } from '@libs/core/server/server';
 import { StatusCodes } from 'http-status-codes';
 
 // Find a way to type the option to the following
@@ -18,7 +18,7 @@ export function Controller(options: any) {
         return originalMethod.call(this, ctx);
       }, (result, c) => {
         if (!result.success) {
-          console.log(result.error);
+          console.error(result.error);
           return c.json(
             {
               code: StatusCodes.BAD_REQUEST,
