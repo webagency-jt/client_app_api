@@ -48,6 +48,20 @@ export class Config {
    * Get env variables
    */
   public get<T>(value: string): T {
-    return process.env[value] as T;
+    const envValue = process.env[value];
+
+    if (envValue === 'true') {
+      return true as T;
+    }
+
+    if (envValue === 'false') {
+      return false as T;
+    }
+
+    if (typeof envValue === 'string' && !isNaN(Number(envValue))) {
+      return Number(envValue) as T;
+    }
+
+    return envValue as T;
   }
 }
