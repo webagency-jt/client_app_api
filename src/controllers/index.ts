@@ -31,10 +31,10 @@ export class ControllerRoot implements IController {
     this.notificationsController.setup();
   }
 
-
   @Controller({
     method: 'get',
     path: '/',
+    responses: {},
   })
   private helloWorld(ctx?: hono.Context): unknown {
     isContextDefined(ctx);
