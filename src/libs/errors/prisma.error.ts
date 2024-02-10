@@ -1,15 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
-
-export type ErrorReturn = {
-  message: string,
-  httpCode: number,
-  detail?: any,
-};
-
-export function isErrorReturnGuard(object: any): object is ErrorReturn {
-  return typeof object == 'object' && object?.message && object?.httpCode;
-}
+import { ErrorReturn } from './https-errors';
 
 const traceRefer = '(see trace for more informations)';
 // For more informations: https://www.prisma.io/docs/orm/reference/error-reference#prisma-client-query-engine

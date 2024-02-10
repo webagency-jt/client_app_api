@@ -6,6 +6,7 @@ import { AppLogger } from '@libs/core/logger/logger';
 import { Config, ENV_ENUM } from '@config/config';
 import { ControllerRoot } from './controllers';
 import { HTTPException } from 'hono/http-exception';
+import { HttpErrors, isErrorReturnGuard } from '@libs/errors/https-errors';
 import { Prisma } from '@prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
@@ -14,10 +15,9 @@ import { cors } from 'hono/cors';
 import { csrf } from 'hono/csrf';
 import { iocContainer } from '@config/ioc/container';
 import { logger } from 'hono/logger';
-import { mapPrismaClientErrors, isErrorReturnGuard } from '@libs/errors/prisma.error';
+import { mapPrismaClientErrors } from '@libs/errors/prisma.error';
 import { sentry } from '@hono/sentry';
 import { swaggerUI } from '@hono/swagger-ui';
-
 // Initialize Hono
 const app = iocContainer.get<App>(SERVICE_IDENTIFIER.App).hono;
 
@@ -49,7 +49,6 @@ if (withLog) {
 }
 
 if (env === ENV_ENUM.DEV) {
-
   // Setup swagger
   app.get('/swagger', swaggerUI({
     url: '/doc',
@@ -84,6 +83,12 @@ app.onError((err, c) => {
   appLogger.pino.error(err);
   if (err instanceof HTTPException) {
     return err.getResponse();
+  }
+
+  if (err instanceof HttpErrors) {
+    const error = err.getError();
+    c.status(error.httpCode);
+    return c.json(error);
   }
 
   if (err instanceof Prisma.PrismaClientKnownRequestError || err instanceof Prisma.PrismaClientUnknownRequestError) {
