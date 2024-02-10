@@ -1,4 +1,4 @@
-export interface IUserInput {
+export interface IUserCreateInput {
   username: string,
   password: string,
   email: string,
@@ -9,4 +9,9 @@ export interface IUser {
   email: string;
   username: string;
   password: string | null;
+}
+
+export interface IUserLoginInput {
+  email: string;
+  password: string;
 }

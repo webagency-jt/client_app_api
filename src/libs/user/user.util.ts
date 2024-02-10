@@ -1,4 +1,4 @@
-import { IUserInput } from './user.interface';
+import { IUser, IUserCreateInput } from './user.interface';
 
 export function exclude<Property extends Record<string, any>, Key extends keyof Property>(
   user: Property,
@@ -11,6 +11,10 @@ export function exclude<Property extends Record<string, any>, Key extends keyof 
   return filteredEntries;
 }
 
-export function UserInputTypeGuard(userInput: unknown): userInput is IUserInput {
+export function UserInputTypeGuard(userInput: unknown): userInput is IUserCreateInput {
+  return true;
+}
+
+export function UserTypeGuard(userInput: unknown): userInput is IUser {
   return true;
 }

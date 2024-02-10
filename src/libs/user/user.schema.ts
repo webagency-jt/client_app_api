@@ -1,6 +1,6 @@
 import { z } from '@hono/zod-openapi';
 
-export const UserInputSchema = z.object({
+export const UserCreateInputSchema = z.object({
   username: z.string().min(3),
   password: z
     .string()
@@ -21,6 +21,29 @@ export const UserInputSchema = z.object({
         in: 'path',
       },
       example: 'example@gmail.com',
+    }),
+});
+
+export const UserLoginInputSchema = z.object({
+  email: z
+    .string()
+    .email()
+    .openapi({
+      param: {
+        name: 'email',
+        in: 'path',
+      },
+      example: 'example@gmail.com',
+    }),
+  password: z
+    .string()
+    .min(5)
+    .openapi({
+      param: {
+        name: 'password',
+        in: 'path',
+      },
+      example: '1212121',
     }),
 });
 
