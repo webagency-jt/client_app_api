@@ -11,6 +11,7 @@
     "@hono/sentry": "^1.0.0",
     "@hono/zod-openapi": "0.9.5",
     "@prisma/client": "^5.8.1",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.3.2",
     "hono": "3.12.8",
     "http-status-codes": "^2.3.0",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@hono/swagger-ui": "^0.2.1",
+    "@types/bcrypt": "^5.0.2",
     "@types/bun": "latest",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
