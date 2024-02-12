@@ -5,9 +5,10 @@ import { NotificationsController } from './notifications/notifications.controlle
 import { PostsController } from './posts/posts.controller';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
-import { UserController } from './user/user.controller';
 import { injectable, inject, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
+import { AuthController } from './auth/auth.controller';
+import { UsersRootController } from './user';
 
 export interface IController {
   // Where root will be loaded
@@ -19,16 +20,18 @@ export class ControllerRoot implements IController {
   public constructor(
     @inject(SERVICE_IDENTIFIER.App) private server: App,
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.posts) private postsController: PostsController,
-    @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user) private userController: UserController,
+    @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user_root) private usersRootController: UsersRootController,
+    @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.auth) private authController: AuthController,
     // eslint-disable-next-line max-len
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.notifications) private notificationsController: NotificationsController,
   ) { }
 
   public setup(): void {
     this.helloWorld();
-    this.userController.setup();
-    this.postsController.setup();
+    this.authController.setup();
     this.notificationsController.setup();
+    this.postsController.setup();
+    this.usersRootController.setup();
   }
 
   @Controller({

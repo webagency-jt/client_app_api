@@ -1,15 +1,8 @@
-import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller';
 import { IController } from '..';
-import { IUserCreateInput, IUserLoginInput } from '@libs/user/user.interface';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
-import { StatusCodes } from 'http-status-codes';
-import { UserCreateInputSchema, UserLoginInputSchema, UserSchema } from '@libs/user/user.schema';
 import { injectable, inject, named } from 'inversify';
-import { isContextDefined } from '@libs/core/helpers/context';
-import { exclude } from '@libs/user/user.util';
 import { UserService } from '@libs/user/user.service';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
@@ -21,75 +14,6 @@ export class UserController implements IController {
   ) { }
 
 
-  public setup(): any {
-    this.login();
-    this.create();
-  }
+  public setup(): any { }
 
-  @Controller({
-    method: 'post',
-    path: '/users/{id}',
-    request: {
-      body: {
-        content: {
-          // Validation de l'input
-          'application/json': {
-            schema: UserCreateInputSchema,
-          },
-        },
-      },
-    },
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            // Validation de l'output
-            schema: UserSchema,
-          },
-        },
-      },
-      409: {
-        content: {
-          'application/json': {
-            // Validation de l'output
-            schema: {},
-          },
-        },
-      },
-    },
-  })
-  private async create(ctx?: hono.Context): Promise<unknown> {
-    isContextDefined(ctx);
-    if (ctx) {
-      const body = await ctx.req.json() as IUserCreateInput;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const createdUser = await this.userService.create(body);
-      ctx.status(StatusCodes.CREATED);
-      return ctx.json(exclude(createdUser, ['password']));
-    };
-  }
-
-  @Controller({
-    method: 'post',
-    path: '/users/login',
-    request: {
-      body: {
-        content: {
-          'application/json': {
-            schema: UserLoginInputSchema,
-          },
-        },
-      },
-    },
-    responses: {},
-  })
-  private async login(ctx?: hono.Context): Promise<unknown> {
-    isContextDefined(ctx);
-    if (ctx) {
-      const body = await ctx.req.json() as IUserLoginInput;
-      const createdUser = await this.userService.login(body);
-      ctx.status(StatusCodes.CREATED);
-      return ctx.json(exclude(createdUser, ['password']));
-    };
-  }
 }
