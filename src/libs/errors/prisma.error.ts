@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 import { ErrorReturn } from './https-errors';
 
-const traceRefer = '(see trace for more informations)';
 // For more informations: https://www.prisma.io/docs/orm/reference/error-reference#prisma-client-query-engine
 const PrismaClientErrorMap: { [key: string]: ErrorReturn; } = {
   P2000: {
@@ -62,7 +61,7 @@ const PrismaClientErrorMap: { [key: string]: ErrorReturn; } = {
     httpCode: StatusCodes.BAD_REQUEST,
   },
   P2014: {
-    message: `The change you are trying to make would violate the required relation between models ${traceRefer}.`,
+    message: 'The change you are trying to make would violate the required relation between models.',
     httpCode: StatusCodes.UNPROCESSABLE_ENTITY,
   },
   P2015: {
@@ -74,7 +73,7 @@ const PrismaClientErrorMap: { [key: string]: ErrorReturn; } = {
     httpCode: StatusCodes.BAD_REQUEST,
   },
   P2017: {
-    message: `The records for relation models are not connected ${traceRefer}.`,
+    message: 'The records for relation models are not connected.',
     httpCode: StatusCodes.UNPROCESSABLE_ENTITY,
   },
   P2018: {
@@ -94,7 +93,7 @@ const PrismaClientErrorMap: { [key: string]: ErrorReturn; } = {
     httpCode: StatusCodes.NOT_FOUND,
   },
   P2022: {
-    message: `The called column does not exist in the current database ${traceRefer}.`,
+    message: 'The called column does not exist in the current database.',
     httpCode: StatusCodes.NOT_FOUND,
   },
   P2023: {
@@ -103,7 +102,7 @@ const PrismaClientErrorMap: { [key: string]: ErrorReturn; } = {
   },
   P2024: {
     // eslint-disable-next-line max-len
-    message: `Timed out fetching a new connection from the connection pool. (More info: http://pris.ly/d/connection-pool ${traceRefer}.`,
+    message: 'Timed out fetching a new connection from the connection pool. (More info: http://pris.ly/d/connection-pool.',
     httpCode: StatusCodes.GATEWAY_TIMEOUT,
   },
   P2025: {
