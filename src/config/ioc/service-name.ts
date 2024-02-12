@@ -5,13 +5,18 @@
  */
 const SERVICE_NAME = {
   controllers: {
+    auth: 'auth',
+    notifications: 'notifications',
+    posts: 'posts',
     root: 'root',
     user: 'user',
-    posts: 'posts',
-    notifications: 'notifications',
+    user_root: 'user_root',
+    user_settings: 'user_settings',
   },
   libs: {
     user_repository: 'user_repository',
+    user_settings_repository: 'user_settings_repository',
+    user_settings_service: 'user_settings_service',
     user_service: 'user_service',
   },
 };
