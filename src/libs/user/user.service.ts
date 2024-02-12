@@ -28,7 +28,7 @@ export class UserService {
   }
 
   public async login(user: IUserLoginInput): Promise<any> {
-    const userFound = await this.userRepository.find(user.email);
+    const userFound = await this.userRepository.findUniqueByEmail(user.email);
     if (userFound) {
       const userPassword = userFound.password ?? '';
       const isMatch = await Bun.password.verify(user.password, userPassword);

@@ -2,9 +2,7 @@ import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { AppOrm } from '@libs/core/orm/orm';
 import { inject, injectable } from 'inversify';
 import { IUserCreateInput, IUser } from './user.interface';
-import { User } from '@prisma/client';
 
-// TODO: voir pour utiliser ça pour authentifier le user : https://github.com/nextauthjs/next-auth
 @injectable()
 export class UserRepository {
 
@@ -28,10 +26,18 @@ export class UserRepository {
     }
   }
 
-  public async find(email: string): Promise<IUser | null> {
+  public async findUniqueByEmail(email: string): Promise<IUser | null> {
     return this.orm.client.user.findUnique({
       where: {
         email,
+      },
+    });
+  }
+
+  public async findUniqueById(id: string): Promise<IUser | null> {
+    return this.orm.client.user.findUnique({
+      where: {
+        id,
       },
     });
   }
