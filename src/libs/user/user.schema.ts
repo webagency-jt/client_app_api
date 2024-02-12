@@ -8,7 +8,6 @@ export const UserCreateInputSchema = z.object({
     .openapi({
       param: {
         name: 'password',
-        in: 'path',
       },
       example: '1212121',
     }),
@@ -18,7 +17,6 @@ export const UserCreateInputSchema = z.object({
     .openapi({
       param: {
         name: 'email',
-        in: 'path',
       },
       example: 'example@gmail.com',
     }),
@@ -31,7 +29,6 @@ export const UserLoginInputSchema = z.object({
     .openapi({
       param: {
         name: 'email',
-        in: 'path',
       },
       example: 'example@gmail.com',
     }),
@@ -41,13 +38,12 @@ export const UserLoginInputSchema = z.object({
     .openapi({
       param: {
         name: 'password',
-        in: 'path',
       },
       example: '1212121',
     }),
 });
 
-
+// TODO: complete this schema
 export const UserSchema = z
   .object({
     id: z.string().openapi({
