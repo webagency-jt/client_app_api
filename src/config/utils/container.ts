@@ -16,6 +16,8 @@ import { UserSettingsRepository } from '@libs/user/modules/user-settings/user-se
 import { UserSettingsService } from '@libs/user/modules/user-settings/user-settings.service';
 import { UsersRootController } from '@controller/user';
 import { UserSettingsController } from '@controller/user/user-settings.controller';
+import { UserInformationsRepository } from '@libs/user/modules/user-informations/user-informations.repository';
+import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
 
 export function bindContainer(container: Container): void {
   /* #region Singleton Class */
@@ -34,6 +36,10 @@ export function bindContainer(container: Container): void {
     .whenTargetNamed(SERVICE_NAME.libs.user_settings_repository);
   container.bind<UserSettingsService>(SERVICE_IDENTIFIER.Libs).to(UserSettingsService)
     .whenTargetNamed(SERVICE_NAME.libs.user_settings_service);
+  container.bind<UserInformationsRepository>(SERVICE_IDENTIFIER.Libs).to(UserInformationsRepository)
+    .whenTargetNamed(SERVICE_NAME.libs.user_informations_repository);
+  container.bind<UserInformationsService>(SERVICE_IDENTIFIER.Libs).to(UserInformationsService)
+    .whenTargetNamed(SERVICE_NAME.libs.user_informations_service);
   /* #endregion */
 
   /* #region Controller */

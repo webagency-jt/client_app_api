@@ -17,6 +17,8 @@ const SERVICE_NAME = {
     user_repository: 'user_repository',
     user_settings_repository: 'user_settings_repository',
     user_settings_service: 'user_settings_service',
+    user_informations_service: 'user_informations_service',
+    user_informations_repository: 'user_informations_repository',
     user_service: 'user_service',
   },
 };
