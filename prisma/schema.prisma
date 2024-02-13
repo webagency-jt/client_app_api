@@ -46,9 +46,9 @@ model UserInformations {
   siret       String?
   tva         Int?
   city        String?
-  State       String?
+  state       String?
   zip         String?
-  adress      String?
+  address     String?
 }
 
 model Sites {
