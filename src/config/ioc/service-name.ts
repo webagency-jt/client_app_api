@@ -7,11 +7,11 @@ const SERVICE_NAME = {
   controllers: {
     auth: 'auth',
     notifications: 'notifications',
-    posts: 'posts',
     root: 'root',
     user: 'user',
     user_root: 'user_root',
     user_settings: 'user_settings',
+    user_informations: 'user_informations',
   },
   libs: {
     user_repository: 'user_repository',

@@ -6,7 +6,6 @@ import { Config } from '@config/config';
 import { Container } from 'inversify';
 import { ControllerRoot } from '@controller/index';
 import { NotificationsController } from '@controller/notifications/notifications.controller';
-import { PostsController } from '@controller/posts/posts.controller';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserController } from '@controller/user/user.controller';
@@ -18,6 +17,7 @@ import { UsersRootController } from '@controller/user';
 import { UserSettingsController } from '@controller/user/user-settings.controller';
 import { UserInformationsRepository } from '@libs/user/modules/user-informations/user-informations.repository';
 import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
+import { UserInformationsController } from '@controller/user/user-informations.controller';
 
 export function bindContainer(container: Container): void {
   /* #region Singleton Class */
@@ -47,8 +47,6 @@ export function bindContainer(container: Container): void {
     .whenTargetNamed(SERVICE_NAME.controllers.root);
   container.bind<UserController>(SERVICE_IDENTIFIER.Controller).to(UserController)
     .whenTargetNamed(SERVICE_NAME.controllers.user);
-  container.bind<PostsController>(SERVICE_IDENTIFIER.Controller).to(PostsController)
-    .whenTargetNamed(SERVICE_NAME.controllers.posts);
   container.bind<NotificationsController>(SERVICE_IDENTIFIER.Controller).to(NotificationsController)
     .whenTargetNamed(SERVICE_NAME.controllers.notifications);
   container.bind<AuthController>(SERVICE_IDENTIFIER.Controller).to(AuthController)
@@ -57,5 +55,7 @@ export function bindContainer(container: Container): void {
     .whenTargetNamed(SERVICE_NAME.controllers.user_root);
   container.bind<UserSettingsController>(SERVICE_IDENTIFIER.Controller).to(UserSettingsController)
     .whenTargetNamed(SERVICE_NAME.controllers.user_settings);
+  container.bind<UserInformationsController>(SERVICE_IDENTIFIER.Controller).to(UserInformationsController)
+    .whenTargetNamed(SERVICE_NAME.controllers.user_informations);
   /* #endregion */
 }
