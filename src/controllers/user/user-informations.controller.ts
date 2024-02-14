@@ -10,6 +10,7 @@ import { IUserInformations } from '@libs/user/modules/user-informations/user-inf
 import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
 import { UserInformationsInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
 import { StatusCodes } from 'http-status-codes';
+import { z } from '@hono/zod-openapi';
 
 @injectable()
 export class UserInformationsController implements IController {
@@ -21,6 +22,7 @@ export class UserInformationsController implements IController {
   public setup(): any {
     this.updateSettings();
     this.createSettings();
+    this.getSettings();
   }
 
 
@@ -56,6 +58,32 @@ export class UserInformationsController implements IController {
     };
   }
 
+  @Controller({
+    method: 'get',
+    path: '/users/informations/{userId}',
+    request: {
+      params: z.object({
+        userId: z.string(),
+      }),
+    },
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: UserInformationsSchema,
+          },
+        },
+      },
+    },
+  })
+  private async getSettings(ctx?: hono.Context): Promise<unknown> {
+    isContextDefined(ctx);
+    if (ctx) {
+      const { userId } = ctx.req.param();
+      const userFound = await this.userInformationsService.findUnique(userId);
+      return ctx.json(userFound);
+    };
+  }
 
   @Controller({
     method: 'put',

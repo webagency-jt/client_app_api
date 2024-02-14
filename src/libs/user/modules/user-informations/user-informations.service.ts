@@ -5,6 +5,7 @@ import { SERVICE_NAME } from '@config/ioc/service-name';
 import { IUserInformations } from './user-informations.interface';
 import { HttpErrors } from '@libs/errors/https-errors';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { IUserId } from '@libs/schemas/user-id.schema';
 
 @injectable()
 export class UserInformationsService {
@@ -20,6 +21,10 @@ export class UserInformationsService {
     } else {
       throw new HttpErrors(ReasonPhrases.CONFLICT, StatusCodes.CONFLICT);
     }
+  }
+
+  public async findUnique(userId: string): Promise<IUserInformations | null> {
+    return this.userInformationsRepository.findUnique(userId);
   }
 
   public async update(userInformationsInput: Partial<IUserInformations>): Promise<IUserInformations> {
