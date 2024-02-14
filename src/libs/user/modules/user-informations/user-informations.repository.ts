@@ -10,26 +10,11 @@ export class UserInformationsRepository {
     @inject(SERVICE_IDENTIFIER.Orm) public orm: AppOrm,
   ) { }
 
-  public async upsert(userInformationsInput: IUserInformations): Promise<IUserInformations> {
+  public async findUnique(userId: string): Promise<IUserInformations | null> {
     try {
-      return this.orm.client.userInformations.upsert({
+      return this.orm.client.userInformations.findUnique({
         where: {
-          userId: userSettingsInput.userId,
-        },
-        update: {
-          address: '',
-          city: '',
-          firstname: '',
-          lastname: '',
-          phoneNumber: '',
-          siret: '',
-          state: '',
-          tva: 1,
-          userId: '',
-          zip: '',
-        },
-        create: {
-
+          userId,
         },
       });
     } catch (e: unknown) {
@@ -37,4 +22,26 @@ export class UserInformationsRepository {
     }
   }
 
+  public async create(userInformationsInput: IUserInformations): Promise<IUserInformations> {
+    try {
+      return this.orm.client.userInformations.create({
+        data: userInformationsInput,
+      });
+    } catch (e: unknown) {
+      throw e;
+    }
+  }
+
+  public async update(userInformationsInput: Partial<IUserInformations>): Promise<IUserInformations> {
+    try {
+      return this.orm.client.userInformations.update({
+        where: {
+          userId: userInformationsInput.userId,
+        },
+        data: userInformationsInput,
+      });
+    } catch (e: unknown) {
+      throw e;
+    }
+  }
 }
