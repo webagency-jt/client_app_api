@@ -2,7 +2,6 @@ import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
 import { Controller } from '@libs/decorators/controller';
 import { NotificationsController } from './notifications/notifications.controller';
-import { PostsController } from './posts/posts.controller';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { injectable, inject, named } from 'inversify';
@@ -19,7 +18,6 @@ export interface IController {
 export class ControllerRoot implements IController {
   public constructor(
     @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.posts) private postsController: PostsController,
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user_root) private usersRootController: UsersRootController,
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.auth) private authController: AuthController,
     // eslint-disable-next-line max-len
@@ -30,7 +28,6 @@ export class ControllerRoot implements IController {
     this.helloWorld();
     this.authController.setup();
     this.notificationsController.setup();
-    this.postsController.setup();
     this.usersRootController.setup();
   }
 

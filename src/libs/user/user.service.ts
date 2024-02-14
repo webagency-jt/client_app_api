@@ -7,6 +7,7 @@ import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserRepository } from './user.repository';
 import { inject, injectable, named } from 'inversify';
+import { IUserEmail } from '@libs/schemas/user-email.schema';
 
 // TODO: voir pour utiliser ça pour authentifier le user : https://github.com/nextauthjs/next-auth
 @injectable()
@@ -17,6 +18,7 @@ export class UserService {
     @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_repository) private userRepository: UserRepository,
   ) { }
 
+  // TODO: décaler le create et login dans le auth
   public async create(user: IUserCreateInput): Promise<IUser> {
     const saltRound = this.config.get<number>('SALT_ROUND');
     const hashedPassword = await Bun.password.hash(user.password, {
@@ -35,10 +37,16 @@ export class UserService {
       if (isMatch) {
         return userFound;
       } else {
-        throw new HttpErrors(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
+        // For security reason we will never tell if the user exist or not
+        throw new HttpErrors(`User '${user.email}' ${ReasonPhrases.NOT_FOUND}`, StatusCodes.NOT_FOUND);
       }
     } else {
       throw new HttpErrors(`User '${user.email}' ${ReasonPhrases.NOT_FOUND}`, StatusCodes.NOT_FOUND);
     }
+  }
+
+  public async exist(user: IUserEmail): Promise<boolean | null> {
+    const userExist = await this.userRepository.findUniqueByEmail(user.email);
+    return !!userExist;
   }
 }

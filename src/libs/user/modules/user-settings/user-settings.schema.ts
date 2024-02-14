@@ -1,6 +1,6 @@
 import { z } from '@hono/zod-openapi';
 
-export const UserSettingsCreateInputSchema = z.object({
+export const UserSettingsInputSchema = z.object({
   userId: z
     .string()
     .openapi({

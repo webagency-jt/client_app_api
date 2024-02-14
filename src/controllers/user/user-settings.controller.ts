@@ -5,7 +5,7 @@ import { IController } from '..';
 import { IUserSettingsInput } from '@libs/user/modules/user-settings/user-settings.interface';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
-import { UserSettingsCreateInputSchema, UserSettingsSchema } from '@libs/user/modules/user-settings/user-settings.schema';
+import { UserSettingsInputSchema, UserSettingsSchema } from '@libs/user/modules/user-settings/user-settings.schema';
 import { UserSettingsRepository } from '@libs/user/modules/user-settings/user-settings.repository';
 import { UserSettingsService } from '@libs/user/modules/user-settings/user-settings.service';
 import { injectable, inject, named } from 'inversify';
@@ -31,7 +31,7 @@ export class UserSettingsController implements IController {
       body: {
         content: {
           'application/json': {
-            schema: UserSettingsCreateInputSchema,
+            schema: UserSettingsInputSchema,
           },
         },
       },
@@ -54,6 +54,4 @@ export class UserSettingsController implements IController {
       return ctx.json(updatedSettings);
     };
   }
-
-
 }
