@@ -34,6 +34,7 @@ export class UserController implements IController {
         },
       },
     },
+    responses: {},
   })
   private async exist(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
