@@ -9,6 +9,7 @@ import { isContextDefined } from '@libs/core/helpers/context';
 import { IUserInformations } from '@libs/user/modules/user-informations/user-informations.interface';
 import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
 import { UserInformationsInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
+import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export class UserInformationsController implements IController {
@@ -49,7 +50,8 @@ export class UserInformationsController implements IController {
     isContextDefined(ctx);
     if (ctx) {
       const body = await ctx.req.json() as IUserInformations;
-      const userCreated = this.userInformationsService.create(body);
+      const userCreated = await this.userInformationsService.create(body);
+      ctx.status(StatusCodes.CREATED);
       return ctx.json(userCreated);
     };
   }
@@ -81,7 +83,8 @@ export class UserInformationsController implements IController {
     isContextDefined(ctx);
     if (ctx) {
       const body = await ctx.req.json() as Partial<IUserInformations>;
-      const updatedInformations = this.userInformationsService.update(body);
+      const updatedInformations = await this.userInformationsService.update(body);
+      ctx.status(StatusCodes.OK);
       return ctx.json(updatedInformations);
     };
   }

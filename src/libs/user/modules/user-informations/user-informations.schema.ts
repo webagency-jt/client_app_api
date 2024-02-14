@@ -59,7 +59,7 @@ export const UserInformationsInputSchema = z.object({
       },
     }),
   tva: z
-    .string()
+    .number()
     .openapi({
       param: {
         name: 'tva',

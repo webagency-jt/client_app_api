@@ -4,7 +4,7 @@ export const UserCreateInputSchema = z.object({
   username: z.string().min(3),
   password: z
     .string()
-    .min(5)
+    .min(6)
     .openapi({
       param: {
         name: 'password',
