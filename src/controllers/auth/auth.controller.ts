@@ -88,7 +88,7 @@ export class AuthController implements IController {
     if (ctx) {
       const body = await ctx.req.json() as IUserLoginInput;
       const createdUser = await this.userService.login(body);
-      ctx.status(StatusCodes.CREATED);
+      ctx.status(StatusCodes.OK);
       return ctx.json(exclude(createdUser, ['password']));
     };
   }
