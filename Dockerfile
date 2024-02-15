@@ -10,6 +10,8 @@ ENV ORIGINS ''
 ENV SENTRY_DSN ''
 ENV ENV=PROD
 ENV LOGGER true
+ENV JWT_TOKEN ''
+ENV SALT_ROUND 10
 
 # install dependencies into temp directory
 # this will cache them and speed up future builds

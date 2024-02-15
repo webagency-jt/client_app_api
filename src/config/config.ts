@@ -31,6 +31,8 @@ export class Config {
       ORIGINS: withDevDefault(z.string(), '*'),
       LOGGER: withDevDefault(z.string().transform(Boolean), true),
       SENTRY_DSN: withDevDefault(z.string(), ''),
+      JWT_TOKEN: withDevDefault(z.string(), ''),
+      SALT_ROUND: withDevDefault(z.string().transform(Number), 5),
     });
 
     const parsed = schema.safeParse(process.env);
