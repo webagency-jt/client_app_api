@@ -18,6 +18,12 @@ model User {
   sites         Sites[]
 }
 
+model Codes {
+  id   String   @id @default(auto()) @map("_id") @db.ObjectId
+  type CodeType @default(register)
+  code String
+}
+
 model UserSettings {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
@@ -110,4 +116,8 @@ enum Lang {
 enum Status {
   done
   inProgress
+}
+
+enum CodeType {
+  register
 }
