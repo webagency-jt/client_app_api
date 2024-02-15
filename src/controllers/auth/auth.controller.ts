@@ -20,7 +20,7 @@ export class AuthController implements IController {
   ) { }
 
 
-  public setup(): any {
+  public setup(): void {
     this.localLogin();
     this.localRegister();
   }
