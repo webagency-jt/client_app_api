@@ -5,16 +5,23 @@ import { IController } from '..';
 import { UserSettingsController } from './user-settings.controller';
 import { UserController } from './user.controller';
 import { UserInformationsController } from './user-informations.controller';
+import { App } from '@libs/core/server/server';
+import { jwtMiddleware } from 'src';
 
 @injectable()
 export class UsersRootController implements IController {
   public constructor(
+    @inject(SERVICE_IDENTIFIER.App) private server: App,
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user) private userController: UserController,
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user_settings) private userSettingsController: UserSettingsController,
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user_informations) private userInformationsController: UserInformationsController,
   ) { }
 
   public setup(): void {
+    this.server.hono.use(
+      '/users/*',
+      jwtMiddleware
+    );
     this.userSettingsController.setup();
     this.userController.setup();
     this.userInformationsController.setup();

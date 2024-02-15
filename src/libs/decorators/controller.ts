@@ -1,6 +1,8 @@
 import { createRoute } from '@hono/zod-openapi';
 import { App } from '@libs/core/server/server';
-import { StatusCodes } from 'http-status-codes';
+import { HttpErrors } from '@libs/errors/https-errors';
+import { IUser } from '@libs/user/user.interface';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 // Find a way to type the option to the following
 // <P extends string, R extends Omit<RouteConfig, 'path'> & {path: P;}>;
@@ -14,7 +16,23 @@ export function Controller(options: any) {
       // Define route
       const route = createRoute(options);
 
-      return server.hono.openapi(route, (ctx) => {
+      return server.hono.openapi(route, async (ctx) => {
+        // TODO: see if there is a better option than doing the following
+        // if an user try to an action that is for a different account then block it
+        if (options?.secureRoute) {
+          const userJwt = ctx.get('jwtPayload') as IUser;
+          let userId: string;
+          if (route.path === 'get') {
+            const params = ctx.req.param();
+            userId = params?.userId;
+          } else {
+            const body = await ctx.req.json();
+            userId = body?.userId;
+          }
+          if (userJwt.id !== userId) {
+            throw new HttpErrors(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
+          }
+        }
         return originalMethod.call(this, ctx);
       }, (result, c) => {
         if (!result.success) {

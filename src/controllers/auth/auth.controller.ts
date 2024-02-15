@@ -89,7 +89,7 @@ export class AuthController implements IController {
       const body = await ctx.req.json() as IUserLoginInput;
       const createdUser = await this.userService.login(body);
       ctx.status(StatusCodes.OK);
-      return ctx.json(exclude(createdUser, ['password']));
+      return ctx.json(createdUser);
     };
   }
 }

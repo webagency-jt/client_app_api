@@ -87,6 +87,7 @@ export class UserInformationsController implements IController {
 
   @Controller({
     method: 'put',
+    secureRoute: true,
     path: '/users/informations',
     request: {
       body: {

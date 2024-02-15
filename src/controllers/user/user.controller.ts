@@ -40,8 +40,9 @@ export class UserController implements IController {
     isContextDefined(ctx);
     if (ctx) {
       const body = await ctx.req.json() as IUserEmail;
+      const payload = ctx.get('jwtPayload');
       const updatedSettings = await this.userService.exist(body);
-      return ctx.json(updatedSettings);
+      return ctx.json({ updatedSettings, payload });
     };
   }
 

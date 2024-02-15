@@ -8,6 +8,8 @@ import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserRepository } from './user.repository';
 import { inject, injectable, named } from 'inversify';
 import { IUserEmail } from '@libs/schemas/user-email.schema';
+import { exclude } from './user.util';
+import { sign } from 'hono/jwt';
 
 // TODO: voir pour utiliser ça pour authentifier le user : https://github.com/nextauthjs/next-auth
 @injectable()
@@ -29,13 +31,20 @@ export class UserService {
     return this.userRepository.create(user);
   }
 
+  // TODO: typer la fonction
   public async login(user: IUserLoginInput): Promise<any> {
     const userFound = await this.userRepository.findUniqueByEmail(user.email);
     if (userFound) {
       const userPassword = userFound.password ?? '';
       const isMatch = await Bun.password.verify(user.password, userPassword);
       if (isMatch) {
-        return userFound;
+        const userWithoutPassword = exclude(userFound, ['password']);
+        const jwtSecret = this.config.get<string>('JWT_TOKEN');
+        const token = await sign(userWithoutPassword, jwtSecret);
+        return {
+          ...userWithoutPassword,
+          token,
+        };
       } else {
         // For security reason we will never tell if the user exist or not
         throw new HttpErrors(`User '${user.email}' ${ReasonPhrases.NOT_FOUND}`, StatusCodes.NOT_FOUND);
