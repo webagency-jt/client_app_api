@@ -6,7 +6,7 @@ import { UserSettingsController } from './user-settings.controller';
 import { UserController } from './user.controller';
 import { UserInformationsController } from './user-informations.controller';
 import { App } from '@libs/core/server/server';
-import { jwtMiddleware } from 'src';
+import { JwtMiddleware } from '@libs/core/middlewares/jwt.middleware';
 
 @injectable()
 export class UsersRootController implements IController {
@@ -15,12 +15,13 @@ export class UsersRootController implements IController {
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user) private userController: UserController,
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user_settings) private userSettingsController: UserSettingsController,
     @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user_informations) private userInformationsController: UserInformationsController,
+    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.middleware.jwt_middleware) private jwtMiddleware: JwtMiddleware,
   ) { }
 
   public setup(): void {
     this.server.hono.use(
       '/users/*',
-      jwtMiddleware
+      this.jwtMiddleware.get(),
     );
     this.userSettingsController.setup();
     this.userController.setup();

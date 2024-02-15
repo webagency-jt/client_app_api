@@ -21,6 +21,9 @@ const SERVICE_NAME = {
     user_informations_repository: 'user_informations_repository',
     user_service: 'user_service',
   },
+  middleware: {
+    jwt_middleware: 'jwt_middleware',
+  },
 };
 
 export { SERVICE_NAME };

@@ -18,8 +18,7 @@ import { logger } from 'hono/logger';
 import { mapPrismaClientErrors } from '@libs/errors/prisma.error';
 import { sentry } from '@hono/sentry';
 import { swaggerUI } from '@hono/swagger-ui';
-import { jwt } from 'hono/jwt';
-// TODO: voir si un utilisateur demande de faire une action sur un autre utilisateur le bloquer
+
 // Initialize Hono
 const app = iocContainer.get<App>(SERVICE_IDENTIFIER.App).hono;
 
@@ -29,22 +28,6 @@ config.validateEnv();
 
 // Initialize Logger
 const appLogger = iocContainer.get<AppLogger>(SERVICE_IDENTIFIER.Logger);
-
-const jwtSecret = config.get<string>('JWT_TOKEN');
-export const jwtMiddleware = jwt({
-  secret: jwtSecret,
-});
-
-// TODO: moove this to controller
-app.use(
-  '/users/*',
-  jwtMiddleware
-);
-
-app.use(
-  '/notifications/*',
-  jwtMiddleware
-);
 
 // Setup sentry
 const env = config.get<ENV_ENUM>('ENV');

@@ -18,6 +18,7 @@ import { UserSettingsController } from '@controller/user/user-settings.controlle
 import { UserInformationsRepository } from '@libs/user/modules/user-informations/user-informations.repository';
 import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
 import { UserInformationsController } from '@controller/user/user-informations.controller';
+import { JwtMiddleware } from '@libs/core/middlewares/jwt.middleware';
 
 export function bindContainer(container: Container): void {
   /* #region Singleton Class */
@@ -25,6 +26,8 @@ export function bindContainer(container: Container): void {
   container.bind<Config>(SERVICE_IDENTIFIER.Config).to(Config).inSingletonScope();
   container.bind<AppLogger>(SERVICE_IDENTIFIER.Logger).to(AppLogger).inSingletonScope();
   container.bind<AppOrm>(SERVICE_IDENTIFIER.Orm).to(AppOrm).inSingletonScope();
+  container.bind<JwtMiddleware>(SERVICE_IDENTIFIER.Libs).to(JwtMiddleware).inSingletonScope()
+    .whenTargetNamed(SERVICE_NAME.middleware.jwt_middleware);
   /* #endregion */
 
   /* #region Libs */
