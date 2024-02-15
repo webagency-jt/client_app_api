@@ -7,6 +7,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 // Find a way to type the option to the following
 // <P extends string, R extends Omit<RouteConfig, 'path'> & {path: P;}>;
 // At the moment `Zod OpenApi Hono` don't export all type
+// TODO: add doc for option
 export function Controller(options: any) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor): any {
     const originalMethod = descriptor.value;
