@@ -34,7 +34,7 @@ module.exports = {
     ],
     'dot-notation': 'warn',
     'eol-last': ['warn', 'always'],
-    'max-len': ['warn', { code: 140 }],
+    'max-len': ['warn', { code: 180 }],
     'no-multiple-empty-lines': ['warn', { max: 2 }],
     'no-debugger': 'warn',
     'no-return-await': 'warn',
