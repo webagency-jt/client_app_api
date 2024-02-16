@@ -108,6 +108,13 @@ model Solutions {
   sitesId String? @db.ObjectId
 }
 
+model changelog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  fileName  String
+  className String
+  appliedAt DateTime
+}
+
 enum Lang {
   fr
   en

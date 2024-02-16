@@ -4,7 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "build": "bun run scripts/build.js"
+    "build": "bun run scripts/build.js",
+    "migrate:up": "bun migrate-mongo-config.ts up",
+    "migrate:down": "bun migrate-mongo-config.ts down",
+    "migrate:create": "bun migrate-mongo-config.ts new --name"
   },
   "dependencies": {
     "@abraham/reflection": "0.12.0",
@@ -15,6 +18,8 @@
     "hono": "3.12.8",
     "http-status-codes": "^2.3.0",
     "inversify": "6.0.2",
+    "mongo-migrate-ts": "^1.4.0",
+    "mongodb": "^6.3.0",
     "pino": "^8.17.2",
     "reflect-metadata": "0.2.1",
     "zod": "3.22.4"
