@@ -19,12 +19,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "outDir": "./dist",
-    "types": [
-      "bun",
-      "node",
-      "reflect-metadata"
-    ],
-    "rootDir": "src",
     "baseUrl": ".",
     "paths": {
       "@controller/*": [
@@ -39,13 +33,18 @@
       "@middlewares/*": [
         "src/middlewares/*"
       ]
-    }
+    },
+    "types": [
+      "bun",
+      "node",
+      "reflect-metadata"
+    ],
   },
   "include": [
     ".eslintrc.cjs",
-    "jest.config.js",
     "scripts",
-    "src"
+    "src",
+    "migrations",
   ],
   "exclude": [
     "node_modules"
