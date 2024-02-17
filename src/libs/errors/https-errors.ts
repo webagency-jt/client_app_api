@@ -4,6 +4,7 @@ export type ErrorReturn = {
   detail?: any,
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function isErrorReturnGuard(object: any): object is ErrorReturn {
   return typeof object == 'object' && object?.message && object?.httpCode;
 }
