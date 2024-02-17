@@ -16,7 +16,7 @@ model User {
   settings      UserSettings?
   notifications Notifications?
   sites         Sites[]
-  role          UserRole         @default(utilisateur)
+  role          UserRole         @default(user)
 }
 
 model Codes {
@@ -131,6 +131,6 @@ enum CodeType {
 }
 
 enum UserRole {
-  utilisateur
+  user
   admin
 }
