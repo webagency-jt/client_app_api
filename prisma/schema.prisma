@@ -12,11 +12,11 @@ model User {
   email         String            @unique
   username      String            @unique
   password      String?
+  role          UserRole          @default(user)
   informations  UserInformations?
   settings      UserSettings?
   notifications Notifications?
   sites         Sites[]
-  role          UserRole         @default(user)
 }
 
 model Codes {
