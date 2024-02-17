@@ -13,6 +13,7 @@ module.exports = {
   env: {
     node: true,
   },
+  ignorePatterns: ['migrations/*.js'],
   rules: {
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'warn',
