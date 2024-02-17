@@ -16,6 +16,7 @@ model User {
   settings      UserSettings?
   notifications Notifications?
   sites         Sites[]
+  role          UserRole         @default(utilisateur)
 }
 
 model Codes {
@@ -127,4 +128,9 @@ enum Status {
 
 enum CodeType {
   register
+}
+
+enum UserRole {
+  utilisateur
+  admin
 }
