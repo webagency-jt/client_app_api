@@ -12,6 +12,7 @@ model User {
   email         String            @unique
   username      String            @unique
   password      String?
+  role          UserRole          @default(user)
   informations  UserInformations?
   settings      UserSettings?
   notifications Notifications?
@@ -127,4 +128,9 @@ enum Status {
 
 enum CodeType {
   register
+}
+
+enum UserRole {
+  user
+  admin
 }
