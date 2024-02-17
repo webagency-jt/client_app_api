@@ -9,18 +9,19 @@ export class add_roles_to_user1708190415664 implements MigrationInterface {
     for (const user of users) {
       collection.updateOne(
         {
-          _id: user._id
+          _id: user._id,
         },
         {
           $set: {
-            role: $Enums.UserRole.user
-          }
+            role: $Enums.UserRole.user,
+          },
         }
       );
     }
   }
 
-  public async down(db: Db): Promise<any> {
-    //! no down for this migration
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public async down(_db: Db): Promise<any> {
+    // ! no down for this migration
   }
 }
