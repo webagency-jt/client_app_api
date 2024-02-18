@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi';
-import { EnumLike } from 'zod';
+import { EnumLike, ZodObject } from 'zod';
 // Add rule when needed don't import all rule from zod
 type ZodRule = {
   /** Need to match zod function : https://zod.dev/ */
@@ -20,7 +20,7 @@ type OpenapiParams<T, K extends EnumLike = {}> = {
 
 // Help generate zod schema for openApi with type safe checker
 export class OpenapiFactory {
-  static generateSchema<T, K = keyof T,>(toGenerate: { schemaName?: string, params: OpenapiParams<K>[]; }): any {
+  static generateSchema<T, K = keyof T,>(toGenerate: { schemaName?: string, params: OpenapiParams<K>[]; }): ZodObject<any> {
     const shape: Record<string, any> = {};
     for (const property of toGenerate.params) {
       // Temporary variable to fix ts(2536)
