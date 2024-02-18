@@ -30,10 +30,10 @@ export class OpenapiFactory {
       }
 
       // If the property doesn't exist then handle its parameters
-      shape[propertyName] = OpenapiFactory.getType(property.type, property.enum);
+      shape[propertyName] = OpenapiFactory.getSchemaType(property.type, property.enum);
       if (property.rules) {
         for (const rule of property.rules) {
-          shape[propertyName] = OpenapiFactory.handleRules(shape[propertyName], rule);
+          shape[propertyName] = OpenapiFactory.handleSchemaRules(shape[propertyName], rule);
         }
       }
 
@@ -62,7 +62,7 @@ export class OpenapiFactory {
     );
   }
 
-  private static getType<T extends EnumLike>(type: ZodTypeEnum, customEnum?: T): unknown {
+  private static getSchemaType<T extends EnumLike>(type: ZodTypeEnum, customEnum?: T): unknown {
     switch (type) {
       case 'boolean':
         return z.boolean();
@@ -80,7 +80,7 @@ export class OpenapiFactory {
     }
   }
 
-  private static handleRules(zod: any, zodRule: ZodRule) {
+  private static handleSchemaRules(zod: any, zodRule: ZodRule) {
     if (!zodRule.functionName) {
       throw new Error('functionName need to be provided');
     }
