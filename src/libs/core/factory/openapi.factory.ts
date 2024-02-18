@@ -4,7 +4,7 @@ import { EnumLike } from 'zod';
 type ZodRule = {
   // Need to match zod function : https://zod.dev/
   functionName: string,
-  functionParam: any,
+  functionParam?: any,
 };
 
 type ZodTypeEnum = 'enum' | 'string' | 'boolean' | 'number';
@@ -31,9 +31,10 @@ export class OpenapiFactory {
 
       // If the property doesn't exist then handle its parameters
       shape[propertyName] = OpenapiFactory.getType(property.type, property.enum);
-
-      if (!property.required) {
-        shape[propertyName] = shape[propertyName].optional();
+      if (property.rules) {
+        for (const rule of property.rules) {
+          shape[propertyName] = OpenapiFactory.handleRules(shape[propertyName], rule);
+        }
       }
 
       if (property.example) {
@@ -45,10 +46,8 @@ export class OpenapiFactory {
         });
       }
 
-      if (property.rules) {
-        for (const rule of property.rules) {
-          shape[propertyName] = OpenapiFactory.handleRules(shape[propertyName], rule);
-        }
+      if (!property.required) {
+        shape[propertyName] = shape[propertyName].optional();
       }
     }
 
@@ -82,6 +81,12 @@ export class OpenapiFactory {
   }
 
   private static handleRules(zod: any, zodRule: ZodRule) {
-    return zod[zodRule.functionName](zodRule.functionParam);
+    if (!zodRule.functionName) {
+      throw new Error('functionName need to be provided');
+    }
+    if (zodRule.functionParam) {
+      return zod[zodRule.functionName](zodRule.functionParam);
+    }
+    return zod[zodRule.functionName]();
   }
 }
