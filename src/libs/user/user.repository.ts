@@ -14,7 +14,6 @@ export class UserRepository {
     try {
       const userCreated = await this.orm.client.user.create({
         data: {
-          email: user.email,
           username: user.username,
           password: user.password,
         },
@@ -26,10 +25,10 @@ export class UserRepository {
     }
   }
 
-  public async findUniqueByEmail(email: string): Promise<User | null> {
+  public async findUniqueByUsername(username: string): Promise<User | null> {
     return this.orm.client.user.findUnique({
       where: {
-        email,
+        username,
       },
     });
   }
