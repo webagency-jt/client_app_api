@@ -1,234 +1,177 @@
-import { z } from '@hono/zod-openapi';
+import { OpenapiFactory } from '@libs/core/factory/openapi.factory';
+import { Prisma, UserInformations } from '@prisma/client';
 
-export const UserInformationsInputSchema = z.object({
-  userId: z
-    .string()
-    .openapi({
-      param: {
-        name: 'userId',
-      },
-      example: '65c7d4915826284e1cc90ce3',
-    }),
-  address: z
-    .string()
-    .openapi({
-      param: {
-        name: 'address',
-      },
-    }),
-  city: z
-    .string()
-    .openapi({
-      param: {
-        name: 'city',
-      },
-    }),
-  firstname: z
-    .string()
-    .openapi({
-      param: {
-        name: 'firstname',
-      },
-    }),
-  lastname: z
-    .string()
-    .openapi({
-      param: {
-        name: 'lastname',
-      },
-    }),
-  phoneNumber: z
-    .string()
-    .openapi({
-      param: {
-        name: 'phoneNumber',
-      },
-    }),
-  siret: z
-    .string()
-    .openapi({
-      param: {
-        name: 'siret',
-      },
-    }),
-  state: z
-    .string()
-    .openapi({
-      param: {
-        name: 'state',
-      },
-    }),
-  tva: z
-    .number()
-    .openapi({
-      param: {
-        name: 'tva',
-      },
-    }),
-  zip: z
-    .string()
-    .openapi({
-      param: {
-        name: 'zip',
-      },
-    }),
+export const UserInformationsCreateInputSchema = OpenapiFactory.generateSchema<Prisma.UserInformationsUncheckedUpdateInput>({
+  schemaName: 'UserInformationsCreateInput',
+  params: [
+    {
+      required: true,
+      type: 'string',
+      name: 'userId',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'address',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'city',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'firstname',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'lastname',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'phoneNumber',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'siret',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'state',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'tva',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'zip',
+    },
+  ],
 });
 
-export const UserInformationsUpdateInputSchema = z.object({
-  userId: z
-    .string()
-    .openapi({
-      param: {
-        name: 'userId',
-      },
-      example: '65c7d4915826284e1cc90ce3',
-    }),
-  address: z
-    .string()
-    .openapi({
-      param: {
-        name: 'address',
-      },
-    })
-    .optional(),
-  city: z
-    .string()
-    .openapi({
-      param: {
-        name: 'city',
-      },
-    })
-    .optional(),
-  firstname: z
-    .string()
-    .openapi({
-      param: {
-        name: 'firstname',
-      },
-    })
-    .optional(),
-  lastname: z
-    .string()
-    .openapi({
-      param: {
-        name: 'lastname',
-      },
-    })
-    .optional(),
-  phoneNumber: z
-    .string()
-    .openapi({
-      param: {
-        name: 'phoneNumber',
-      },
-    })
-    .optional(),
-  siret: z
-    .string()
-    .openapi({
-      param: {
-        name: 'siret',
-      },
-    })
-    .optional(),
-  state: z
-    .string()
-    .openapi({
-      param: {
-        name: 'state',
-      },
-    })
-    .optional(),
-  tva: z
-    .string()
-    .openapi({
-      param: {
-        name: 'tva',
-      },
-    })
-    .optional(),
-  zip: z
-    .string()
-    .openapi({
-      param: {
-        name: 'zip',
-      },
-    })
-    .optional(),
+export const UserInformationsUpdateInputSchema = OpenapiFactory.generateSchema<Prisma.UserInformationsUncheckedUpdateInput>({
+  schemaName: 'UserInformationsUpdateInput',
+  params: [
+    {
+      required: false,
+      type: 'string',
+      name: 'userId',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'address',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'city',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'firstname',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'lastname',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'phoneNumber',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'siret',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'state',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'tva',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'zip',
+    },
+  ],
 });
 
-export const UserInformationsSchema = z.object({
-  id: z.string(),
-  userId: z
-    .string()
-    .openapi({
-      param: {
-        name: 'userId',
-      },
-      example: '65c7d4915826284e1cc90ce3',
-    }),
-  address: z
-    .string()
-    .openapi({
-      param: {
-        name: 'address',
-      },
-    }),
-  city: z
-    .string()
-    .openapi({
-      param: {
-        name: 'city',
-      },
-    }),
-  firstname: z
-    .string()
-    .openapi({
-      param: {
-        name: 'firstname',
-      },
-    }),
-  lastname: z
-    .string()
-    .openapi({
-      param: {
-        name: 'lastname',
-      },
-    }),
-  phoneNumber: z
-    .string()
-    .openapi({
-      param: {
-        name: 'phoneNumber',
-      },
-    }),
-  siret: z
-    .string()
-    .openapi({
-      param: {
-        name: 'siret',
-      },
-    }),
-  state: z
-    .string()
-    .openapi({
-      param: {
-        name: 'state',
-      },
-    }),
-  tva: z
-    .string()
-    .openapi({
-      param: {
-        name: 'tva',
-      },
-    }),
-  zip: z
-    .string()
-    .openapi({
-      param: {
-        name: 'zip',
-      },
-    }),
-}).openapi('UserInformations');
 
+export const UserInformationsSchema = OpenapiFactory.generateSchema<UserInformations>({
+  schemaName: 'UserInformations',
+  params: [
+    {
+      required: true,
+      type: 'string',
+      name: 'id',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'userId',
+      example: '65c7d4915826284e1cc90ce3',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'address',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'city',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'firstname',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'lastname',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'phoneNumber',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'siret',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'state',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'tva',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'zip',
+    },
+  ],
+});

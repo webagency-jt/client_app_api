@@ -1,7 +1,7 @@
 import { createRoute } from '@hono/zod-openapi';
 import { App } from '@libs/core/server/server';
 import { HttpErrors } from '@libs/errors/https-errors';
-import { IUser } from '@libs/user/user.interface';
+import { User } from '@prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 // Find a way to type the option to the following
@@ -21,7 +21,7 @@ export function Controller(options: any) {
         // TODO: see if there is a better option than doing the following
         // if an user try to an action that is for a different account then block it
         if (options?.secureRoute) {
-          const userJwt = ctx.get('jwtPayload') as IUser;
+          const userJwt = ctx.get('jwtPayload') as User;
           let userId: string;
           if (route.path === 'get') {
             const params = ctx.req.param();

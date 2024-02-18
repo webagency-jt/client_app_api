@@ -1,59 +1,93 @@
-import { z } from '@hono/zod-openapi';
+import { OpenapiFactory } from '@libs/core/factory/openapi.factory';
+import { $Enums, User } from '@prisma/client';
 
-export const UserCreateInputSchema = z.object({
-  username: z.string().min(3),
-  password: z
-    .string()
-    .min(6)
-    .openapi({
-      param: {
-        name: 'password',
-      },
-      example: '1212121',
-    }),
-  email: z
-    .string()
-    .email()
-    .openapi({
-      param: {
-        name: 'email',
-      },
+export const UserCreateInputSchema = OpenapiFactory.generateSchema<User>({
+  schemaName: 'UserCreateInput',
+  params: [
+    {
+      required: true,
+      type: 'string',
+      name: 'username',
+      rules: [
+        {
+          functionName: 'min',
+          functionParam: 3,
+        },
+      ],
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'email',
       example: 'example@gmail.com',
-    }),
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'password',
+      rules: [
+        {
+          functionName: 'min',
+          functionParam: 5,
+        },
+      ],
+    },
+  ],
 });
 
-export const UserLoginInputSchema = z.object({
-  email: z
-    .string()
-    .email()
-    .openapi({
-      param: {
-        name: 'email',
-      },
+export const UserLoginInputSchema = OpenapiFactory.generateSchema<User>({
+  schemaName: 'UserLoginInput',
+  params: [
+    {
+      required: true,
+      type: 'string',
+      name: 'email',
       example: 'example@gmail.com',
-    }),
-  password: z
-    .string()
-    .min(5)
-    .openapi({
-      param: {
-        name: 'password',
-      },
-      example: '1212121',
-    }),
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'password',
+      rules: [
+        {
+          functionName: 'min',
+          functionParam: 5,
+        },
+      ],
+    },
+  ],
 });
 
-// TODO: complete this schema
-export const UserSchema = z
-  .object({
-    id: z.string().openapi({
-      example: '123',
-    }),
-    name: z.string().openapi({
-      example: 'John Doe',
-    }),
-    age: z.number().openapi({
-      example: 42,
-    }),
-  })
-  .openapi('User');
+
+export const UserSchema = OpenapiFactory.generateSchema<User>({
+  schemaName: 'User',
+  params: [
+    {
+      required: true,
+      type: 'string',
+      example: '65c7d4915826284e1cc90ce3',
+      name: 'id',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'username',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'email',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'password',
+    },
+    {
+      required: true,
+      type: 'enum',
+      enum: $Enums.UserRole,
+      name: 'role',
+    },
+  ],
+});

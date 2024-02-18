@@ -1,17 +1,20 @@
-import { z } from '@hono/zod-openapi';
+import { OpenapiFactory } from '@libs/core/factory/openapi.factory';
+import { Prisma } from '@prisma/client';
 
-export const userEmailSchema = z.object({
-  email: z
-    .string()
-    .openapi({
-      param: {
-        name: 'email',
-      },
+export type UserEmail = Prisma.UserGetPayload<{
+  select: {
+    email: any;
+  };
+}>;
+
+export const userEmailSchema = OpenapiFactory.generateSchema<UserEmail>({
+  schemaName: 'UserEmail',
+  params: [
+    {
+      required: true,
+      type: 'string',
       example: 'hello@gmail.com',
-    }),
+      name: 'email',
+    },
+  ],
 });
-
-// TODO: mettre un filter
-export interface IUserEmail {
-  email: string;
-}
