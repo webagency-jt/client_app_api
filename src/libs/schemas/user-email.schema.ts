@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi';
+import { Prisma } from '@prisma/client';
 
 export const userEmailSchema = z.object({
   email: z
@@ -11,7 +12,8 @@ export const userEmailSchema = z.object({
     }),
 });
 
-// TODO: mettre un filter
-export interface IUserEmail {
-  email: string;
-}
+export type UserEmail = Prisma.UserGetPayload<{
+  select: {
+    email: any;
+  };
+}>;

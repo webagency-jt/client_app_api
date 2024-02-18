@@ -1,17 +1,17 @@
 import Bun from 'bun';
 import { Config } from '@config/config';
 import { HttpErrors } from '@libs/errors/https-errors';
-import { IUserCreateInput, IUser, IUserLoginInput } from './user.interface';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserRepository } from './user.repository';
 import { inject, injectable, named } from 'inversify';
-import { IUserEmail } from '@libs/schemas/user-email.schema';
+import { UserEmail } from '@libs/schemas/user-email.schema';
 import { exclude } from './user.util';
 import { sign } from 'hono/jwt';
+import { Prisma } from '@prisma/client';
+import { UserLoginInput, UserWithoutPassword } from './user.interface';
 
-// TODO: voir pour utiliser ça pour authentifier le user : https://github.com/nextauthjs/next-auth
 @injectable()
 export class UserService {
 
@@ -21,22 +21,25 @@ export class UserService {
   ) { }
 
   // TODO: décaler le create et login dans le auth
-  public async create(user: IUserCreateInput): Promise<IUser> {
+  public async create(user: Prisma.UserCreateInput): Promise<UserWithoutPassword> {
     const saltRound = this.config.get<number>('SALT_ROUND');
-    const hashedPassword = await Bun.password.hash(user.password, {
+    const password = user.password ?? '';
+    const hashedPassword = await Bun.password.hash(password, {
       algorithm: 'bcrypt',
       cost: saltRound,
     });
     user.password = hashedPassword;
-    return this.userRepository.create(user);
+    const createdUser = await this.userRepository.create(user);
+    const userWithoutPassword = exclude(createdUser, ['password']);
+    return userWithoutPassword;
   }
 
-  // TODO: typer la fonction
-  public async login(user: IUserLoginInput): Promise<any> {
+  public async login(user: UserLoginInput): Promise<UserWithoutPassword & { token: string }> {
     const userFound = await this.userRepository.findUniqueByEmail(user.email);
     if (userFound) {
       const userPassword = userFound.password ?? '';
-      const isMatch = await Bun.password.verify(user.password, userPassword);
+      const password = user.password ?? '';
+      const isMatch = await Bun.password.verify(password, userPassword);
       if (isMatch) {
         const userWithoutPassword = exclude(userFound, ['password']);
         const jwtSecret = this.config.get<string>('JWT_TOKEN');
@@ -54,7 +57,7 @@ export class UserService {
     }
   }
 
-  public async exist(user: IUserEmail): Promise<boolean | null> {
+  public async exist(user: UserEmail): Promise<boolean | null> {
     const userExist = await this.userRepository.findUniqueByEmail(user.email);
     return !!userExist;
   }

@@ -2,14 +2,14 @@ import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
 import { Controller } from '@libs/decorators/controller';
 import { IController } from '..';
+import { Prisma } from '@prisma/client';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
+import { StatusCodes } from 'http-status-codes';
+import { UserInformationsInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
+import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
 import { injectable, inject, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
-import { IUserInformations } from '@libs/user/modules/user-informations/user-informations.interface';
-import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
-import { UserInformationsInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
-import { StatusCodes } from 'http-status-codes';
 import { z } from '@hono/zod-openapi';
 
 @injectable()
@@ -51,7 +51,7 @@ export class UserInformationsController implements IController {
   private async createSettings(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
-      const body = await ctx.req.json() as IUserInformations;
+      const body = await ctx.req.json() as Prisma.UserInformationsUncheckedCreateInput;
       const userCreated = await this.userInformationsService.create(body);
       ctx.status(StatusCodes.CREATED);
       return ctx.json(userCreated);
@@ -111,7 +111,7 @@ export class UserInformationsController implements IController {
   private async updateSettings(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
-      const body = await ctx.req.json() as Partial<IUserInformations>;
+      const body = await ctx.req.json() as Prisma.UserInformationsUncheckedUpdateInput;
       const updatedInformations = await this.userInformationsService.update(body);
       ctx.status(StatusCodes.OK);
       return ctx.json(updatedInformations);

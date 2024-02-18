@@ -1,17 +1,17 @@
-export interface IUserCreateInput {
-  username: string,
-  password: string,
-  email: string,
-}
+import { Prisma } from '@prisma/client';
 
-export interface IUser {
-  id: string;
-  email: string;
-  username: string;
-  password: string | null;
-}
+export type UserWithoutPassword = Prisma.UserGetPayload<{
+  select: {
+    id: any,
+    email: any,
+    username: any,
+    role: any,
+  }
+}>;
 
-export interface IUserLoginInput {
-  email: string;
-  password: string;
-}
+export type UserLoginInput = Prisma.UserGetPayload<{
+  select: {
+    email: any,
+    password: any
+  }
+}>;

@@ -1,7 +1,7 @@
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { AppOrm } from '@libs/core/orm/orm';
 import { inject, injectable } from 'inversify';
-import { IUserCreateInput, IUser } from './user.interface';
+import { Prisma, User } from '@prisma/client';
 
 @injectable()
 export class UserRepository {
@@ -10,9 +10,9 @@ export class UserRepository {
     @inject(SERVICE_IDENTIFIER.Orm) public orm: AppOrm,
   ) { }
 
-  public async create(user: IUserCreateInput): Promise<IUser> {
+  public async create(user: Prisma.UserCreateInput): Promise<User> {
     try {
-      const userCreated: IUser = await this.orm.client.user.create({
+      const userCreated = await this.orm.client.user.create({
         data: {
           email: user.email,
           username: user.username,
@@ -26,7 +26,7 @@ export class UserRepository {
     }
   }
 
-  public async findUniqueByEmail(email: string): Promise<IUser | null> {
+  public async findUniqueByEmail(email: string): Promise<User | null> {
     return this.orm.client.user.findUnique({
       where: {
         email,
@@ -34,7 +34,7 @@ export class UserRepository {
     });
   }
 
-  public async findUniqueById(id: string): Promise<IUser | null> {
+  public async findUniqueById(id: string): Promise<User | null> {
     return this.orm.client.user.findUnique({
       where: {
         id,

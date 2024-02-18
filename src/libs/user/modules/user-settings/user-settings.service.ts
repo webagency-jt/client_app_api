@@ -1,11 +1,11 @@
+import { HttpErrors } from '@libs/errors/https-errors';
+import { Prisma, UserSettings } from '@prisma/client';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { inject, injectable, named } from 'inversify';
-import { IUserSettings, IUserSettingsInput } from './user-settings.interface';
-import { UserSettingsRepository } from './user-settings.repository';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserRepository } from '@libs/user/user.repository';
-import { HttpErrors } from '@libs/errors/https-errors';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { UserSettingsRepository } from './user-settings.repository';
+import { inject, injectable, named } from 'inversify';
 
 @injectable()
 export class UserSettingsService {
@@ -15,7 +15,7 @@ export class UserSettingsService {
     @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_settings_repository) public userSettingsRepository: UserSettingsRepository,
   ) { }
 
-  public async update(userSettingsInput: IUserSettingsInput): Promise<IUserSettings> {
+  public async update(userSettingsInput: Prisma.UserSettingsUncheckedCreateInput): Promise<UserSettings> {
     const userFound = await this.userRepository.findUniqueById(userSettingsInput.userId);
     if (userFound) {
       return this.userSettingsRepository.upsert(userSettingsInput);

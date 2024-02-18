@@ -1,4 +1,5 @@
 import { z } from '@hono/zod-openapi';
+import { $Enums } from '@prisma/client';
 
 export const UserSettingsInputSchema = z.object({
   userId: z
@@ -10,7 +11,7 @@ export const UserSettingsInputSchema = z.object({
       example: '65c7d4915826284e1cc90ce3',
     }),
   lang: z
-    .string()
+    .nativeEnum($Enums.Lang)
     .openapi({
       param: {
         name: 'lang',

@@ -2,15 +2,15 @@ import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
 import { Controller } from '@libs/decorators/controller';
 import { IController } from '..';
-import { IUserCreateInput, IUserLoginInput } from '@libs/user/user.interface';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { StatusCodes } from 'http-status-codes';
 import { UserCreateInputSchema, UserSchema, UserLoginInputSchema } from '@libs/user/user.schema';
 import { UserService } from '@libs/user/user.service';
-import { exclude } from '@libs/user/user.util';
 import { inject, injectable, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
+import { Prisma } from '@prisma/client';
+import { UserLoginInput } from '@libs/user/user.interface';
 
 @injectable()
 export class AuthController implements IController {
@@ -60,11 +60,11 @@ export class AuthController implements IController {
   private async localRegister(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
-      const body = await ctx.req.json() as IUserCreateInput;
+      const body = await ctx.req.json() as Prisma.UserCreateInput;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const createdUser = await this.userService.create(body);
       ctx.status(StatusCodes.CREATED);
-      return ctx.json(exclude(createdUser, ['password']));
+      return ctx.json(createdUser);
     };
   }
 
@@ -86,7 +86,7 @@ export class AuthController implements IController {
   private async localLogin(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
-      const body = await ctx.req.json() as IUserLoginInput;
+      const body = await ctx.req.json() as UserLoginInput;
       const createdUser = await this.userService.login(body);
       ctx.status(StatusCodes.OK);
       return ctx.json(createdUser);
