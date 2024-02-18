@@ -1,10 +1,20 @@
-import { z } from '@hono/zod-openapi';
+import { OpenapiFactory } from '@libs/core/factory/openapi.factory';
 
-export const ErrorSchema = z.object({
-  code: z.number().openapi({
-    example: 400,
-  }),
-  message: z.string().openapi({
-    example: 'Bad Request',
-  }),
+// TODO: exposer ce schema a hono
+export const ErrorSchema = OpenapiFactory.generateSchema({
+  schemaName: 'Error',
+  params: [
+    {
+      required: true,
+      type: 'number',
+      example: 400,
+      name: 'code',
+    },
+    {
+      required: true,
+      type: 'string',
+      example: 'Bad Request',
+      name: 'message',
+    },
+  ],
 });

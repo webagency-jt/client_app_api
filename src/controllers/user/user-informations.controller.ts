@@ -6,7 +6,7 @@ import { Prisma } from '@prisma/client';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { StatusCodes } from 'http-status-codes';
-import { UserInformationsInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
+import { UserInformationsCreateInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
 import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
 import { injectable, inject, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
@@ -33,7 +33,7 @@ export class UserInformationsController implements IController {
       body: {
         content: {
           'application/json': {
-            schema: UserInformationsInputSchema,
+            schema: UserInformationsCreateInputSchema,
           },
         },
       },
