@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "build": "bun run scripts/build.js",
-    "migrate:up": "bun migrate-mongo-config.ts up",
-    "migrate:down": "bun migrate-mongo-config.ts down",
-    "migrate:create": "bun migrate-mongo-config.ts new --name"
+    "migrate:up": "bun migration-engine.ts up",
+    "migrate:down": "bun migration-engine.ts down",
+    "migrate:create": "bun migration-engine.ts new --name"
   },
   "dependencies": {
     "@abraham/reflection": "0.12.0",
