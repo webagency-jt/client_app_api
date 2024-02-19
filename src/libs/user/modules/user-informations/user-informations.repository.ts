@@ -36,7 +36,7 @@ export class UserInformationsRepository {
   public async update(userInformationsInput: Prisma.UserInformationsUncheckedUpdateInput): Promise<UserInformations> {
     try {
       const userId = userInformationsInput.userId;
-      if (TypeguardUtils.isStringGuard(userId)) {
+      if (TypeguardUtils.isString(userId)) {
         return this.orm.client.userInformations.update({
           where: {
             userId,

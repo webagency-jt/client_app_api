@@ -7,7 +7,7 @@ import { UserService } from '@libs/user/user.service';
 import { Controller } from '@libs/decorators/controller';
 import * as hono from 'hono';
 import { isContextDefined } from '@libs/core/helpers/context';
-import { UserEmail, userEmailSchema } from '@libs/schemas/user-email.schema';
+import { UserUsername, userUsernameSchema } from '@libs/schemas/user-email.schema';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
@@ -29,7 +29,7 @@ export class UserController implements IController {
       body: {
         content: {
           'application/json': {
-            schema: userEmailSchema,
+            schema: userUsernameSchema,
           },
         },
       },
@@ -39,7 +39,7 @@ export class UserController implements IController {
   private async exist(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
-      const body = await ctx.req.json() as UserEmail;
+      const body = await ctx.req.json() as UserUsername;
       const payload = ctx.get('jwtPayload');
       const updatedSettings = await this.userService.exist(body);
       return ctx.json({ updatedSettings, payload });

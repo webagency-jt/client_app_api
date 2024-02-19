@@ -18,12 +18,6 @@ export const UserCreateInputSchema = OpenapiFactory.generateSchema<User>({
     {
       required: true,
       type: 'string',
-      name: 'email',
-      example: 'example@gmail.com',
-    },
-    {
-      required: true,
-      type: 'string',
       name: 'password',
       rules: [
         {
@@ -41,8 +35,13 @@ export const UserLoginInputSchema = OpenapiFactory.generateSchema<User>({
     {
       required: true,
       type: 'string',
-      name: 'email',
-      example: 'example@gmail.com',
+      name: 'username',
+      rules: [
+        {
+          functionName: 'min',
+          functionParam: 3,
+        },
+      ],
     },
     {
       required: true,
@@ -58,7 +57,6 @@ export const UserLoginInputSchema = OpenapiFactory.generateSchema<User>({
   ],
 });
 
-
 export const UserSchema = OpenapiFactory.generateSchema<User>({
   schemaName: 'User',
   params: [
@@ -72,11 +70,6 @@ export const UserSchema = OpenapiFactory.generateSchema<User>({
       required: true,
       type: 'string',
       name: 'username',
-    },
-    {
-      required: true,
-      type: 'string',
-      name: 'email',
     },
     {
       required: true,
