@@ -1,6 +1,6 @@
 import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller';
+import { Controller } from '@libs/decorators/controller.decorator';
 import { IController } from '..';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';

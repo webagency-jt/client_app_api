@@ -4,17 +4,19 @@ import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
 import { injectable, inject, named } from 'inversify';
 import { UserService } from '@libs/user/user.service';
-import { Controller } from '@libs/decorators/controller';
+import { Controller } from '@libs/decorators/controller.decorator';
 import * as hono from 'hono';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { UserUsername, userUsernameSchema } from '@libs/schemas/user-email.schema';
+import { AdminGuard } from '@libs/guards/admin.guard';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
 export class UserController implements IController {
   public constructor(
     @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_service) private userService: UserService,
+    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_service) private readonly userService: UserService,
+    @inject(SERVICE_IDENTIFIER.Guards) @named(SERVICE_NAME.guards.admin) private readonly adminGuard: AdminGuard,
   ) { }
 
 
@@ -35,6 +37,7 @@ export class UserController implements IController {
       },
     },
     responses: {},
+    guards: [],
   })
   private async exist(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);

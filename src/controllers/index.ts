@@ -1,6 +1,6 @@
 import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller';
+import { Controller } from '@libs/decorators/controller.decorator';
 import { NotificationsController } from './notifications/notifications.controller';
 import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { SERVICE_NAME } from '@config/ioc/service-name';
@@ -8,6 +8,9 @@ import { injectable, inject, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { AuthController } from './auth/auth.controller';
 import { UsersRootController } from './user';
+import { ControllerTest } from '@libs/core/decorators/controller.decorator';
+import { Get } from '@libs/core/decorators/request.decorator';
+import { Request } from '@libs/core/decorators/context.decorator';
 
 export interface IController {
   // Where root will be loaded
@@ -15,6 +18,7 @@ export interface IController {
 }
 
 @injectable()
+@ControllerTest()
 export class ControllerRoot implements IController {
   public constructor(
     @inject(SERVICE_IDENTIFIER.App) private server: App,
@@ -29,6 +33,21 @@ export class ControllerRoot implements IController {
     this.authController.setup();
     this.notificationsController.setup();
     this.usersRootController.setup();
+    this.test();
+  }
+
+  @Controller({
+    method: 'get',
+    path: '/cc',
+    responses: {},
+  })
+  public test(ctx?: hono.Context, @Request() test?: any) {
+    console.log('test', test);
+
+    if (ctx) {
+      return ctx.json('cc');
+    };
+
   }
 
   @Controller({
