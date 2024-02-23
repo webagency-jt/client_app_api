@@ -1,7 +1,7 @@
 import { GuardAbstract } from '@libs/guards/guard.absract';
 import { SERVER, SERVER_TARGET } from '../constant';
 import { RequestMethod } from '../enums/request-method';
-import { RouteConfig } from '../types/hono-zod.types';
+import { RouteConfig } from '../types/hono-zod';
 
 type ControllerMetadata<T extends GuardAbstract = any> = RouteConfig & {
   /** Define if the route need a specific permission to be accessed */
