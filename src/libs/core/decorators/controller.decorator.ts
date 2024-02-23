@@ -2,27 +2,83 @@ import { GuardAbstract } from '@libs/guards/guard.absract';
 import { SERVER, SERVER_TARGET } from '../constant';
 import { RequestMethod } from '../enums/request-method';
 import { RouteConfig } from '../types/hono-zod';
+import { App } from '../server/server';
+import { createRoute } from '@hono/zod-openapi';
+import { HttpErrors } from '@libs/errors/https-errors';
+import { User } from '@prisma/client';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { RouteParameters } from '../types/custom-hono-zod';
 
-type ControllerMetadata<T extends GuardAbstract = any> = RouteConfig & {
-  /** Define if the route need a specific permission to be accessed */
-  guards?: T[],
-  /** if an user try to an action that is for a different account then block it */
-  secureRoute?: boolean,
-};
-
-// Essayer de faire en sorte que lorsque cette fonction est call elle est automatiquement enregistré dans hono
-function Controller(
-  openapiMetadata?: ControllerMetadata,
-  type: RequestMethod,
-): any {
-  return function itSelft(target) {
-    const server = Reflect.getMetadata(SERVER, SERVER_TARGET);
-    console.log('fffff', server);
-  };
+function guardHandle(guards: any) {
+  for (const guard of guards) {
+    // guard.run();
+  }
 }
 
-function createFunctionParameters(type: RequestMethod) {
-  return (path?: ControllerMetadata) => Controller(path, type);
+async function secureRouteHandler(ctx: any, route: any) {
+  // TODO: see if there is a better option than doing the following
+  const userJwt = ctx.get('jwtPayload') as User;
+  let userId: string;
+  if (route.path === 'get') {
+    const params = ctx.req.param() as { userId: string; };
+    userId = params?.userId;
+  } else {
+    const body = await ctx.req.json();
+    userId = body?.userId;
+  }
+  if (userJwt.id !== userId) {
+    throw new HttpErrors(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
+  }
+}
+
+function test(options: RouteParameters, requestType: RequestMethod, target: any) {
+  const server: App = Reflect.getMetadata(SERVER, SERVER_TARGET);
+  // Define route
+  const { guards, secureRoute, ...routeMetadata } = options;
+  const finalRouteMetadata = Object.assign(routeMetadata, {
+    method: requestType,
+  });
+  const route = createRoute(finalRouteMetadata);
+
+  return server.hono.openapi(route, async (ctx) => {
+    // Todo: check to put this 2 validation in middleware
+    if (secureRoute) {
+      await secureRouteHandler(ctx, route);
+    }
+    if (guards) {
+      guardHandle(guards);
+    }
+    return target.call(target, ctx);
+  }, (result, c) => {
+    if (!result.success) {
+      console.error(result.error);
+      return c.json(
+        {
+          code: StatusCodes.BAD_REQUEST,
+          message: result.error,
+        },
+        StatusCodes.BAD_REQUEST
+      );
+    }
+  });
+}
+
+/**
+ * To understand how this function work
+ * @link https://stackoverflow.com/a/70910553/15431338
+ */
+export function createFunctionParameters(type: RequestMethod) {
+  return (routeParameters: RouteParameters) => {
+    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+      const original = target[propertyKey];
+      return {
+        ...descriptor,
+        value() {
+          return test(routeParameters, type, original);
+        },
+      };
+    };
+  };
 }
 
 export const Get = createFunctionParameters(RequestMethod.GET);

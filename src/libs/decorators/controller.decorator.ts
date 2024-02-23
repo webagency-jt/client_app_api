@@ -4,17 +4,10 @@ import { HttpErrors } from '@libs/errors/https-errors';
 import { User } from '@prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { GuardAbstract } from '@libs/guards/guard.absract';
-import { RouteConfig } from '@libs/core/types/hono-zod.types';
 
 // Find a way to type the option to the following
 // TODO: add doc for option
-// TODO: dans le futur réecrire entièrement cette fonction pour la rendre plus propre
-export function Controller<T extends GuardAbstract>(options: RouteConfig & {
-  /** Define if the route need a specific permission to be accessed */
-  guards?: T[],
-  /** if an user try to an action that is for a different account then block it */
-  secureRoute?: boolean,
-}) {
+export function Controller<T extends GuardAbstract = any>(options: RouteParameters<T>) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor): any {
     const originalMethod = descriptor.value;
     descriptor.value = function () {

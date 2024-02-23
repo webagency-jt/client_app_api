@@ -22,9 +22,8 @@ import { BootstrapContainer } from '@libs/core/bootstrap/container';
 const container = BootstrapContainer.Container;
 const appInstance = container.get(App);
 const app = appInstance.hono;
-console.log(app.toString());
 
-Reflect.defineMetadata(SERVER, 'salut', SERVER_TARGET);
+Reflect.defineMetadata(SERVER, appInstance, SERVER_TARGET);
 
 // Initialize Config
 const config = container.get(Config);

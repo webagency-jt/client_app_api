@@ -31,16 +31,15 @@ export class ControllerRoot implements IController {
   }
 
   @Get({
-    method: 'get',
     path: '/cc',
     responses: {},
   })
-  public test(ctx?: hono.Context, test?: any) {
-    console.log('test', test);
-
+  public test(ctx?: hono.Context) {
     if (ctx) {
-      return ctx.json('cc');
-    };
+      return ctx.json({
+        salut: 'mathys',
+      });
+    }
   }
 
   @Controller({

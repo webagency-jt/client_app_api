@@ -41,7 +41,8 @@ interface ResponseConfig {
   content?: ZodContentObject;
 }
 export declare type RouteConfig = Omit<OperationObject, 'responses'> & {
-  method: Method;
+  // Removed because we inject it in background
+  // method: Method;
   path: string;
   request?: {
     body?: ZodRequestBody;
