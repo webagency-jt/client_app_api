@@ -9,8 +9,6 @@ import { HTTPException } from 'hono/http-exception';
 import { HttpErrors, isErrorReturnGuard } from '@libs/errors/https-errors';
 import { Prisma } from '@prisma/client';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { cors } from 'hono/cors';
 import { csrf } from 'hono/csrf';
 import { logger } from 'hono/logger';
@@ -22,18 +20,18 @@ import { BootstrapContainer } from '@libs/core/bootstrap/container';
 
 // Initialize Hono
 const container = BootstrapContainer.Container;
-const appInstance = container.get<App>(SERVICE_IDENTIFIER.App);
+const appInstance = container.get(App);
 const app = appInstance.hono;
 console.log(app.toString());
 
 Reflect.defineMetadata(SERVER, 'salut', SERVER_TARGET);
 
 // Initialize Config
-const config = container.get<Config>(SERVICE_IDENTIFIER.Config);
+const config = container.get(Config);
 config.validateEnv();
 
 // Initialize Logger
-const appLogger = container.get<AppLogger>(SERVICE_IDENTIFIER.Logger);
+const appLogger = container.get(AppLogger);
 
 // Setup sentry
 const env = config.get<ENV_ENUM>('ENV');
@@ -110,7 +108,7 @@ app.onError((err, c) => {
 });
 
 // Setup all routes
-const controllerRoot = container.getNamed<ControllerRoot>(SERVICE_IDENTIFIER.Controller, SERVICE_NAME.controllers.root);
+const controllerRoot = container.get(ControllerRoot);
 controllerRoot.setup();
 
 // Set app port

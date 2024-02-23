@@ -2,10 +2,8 @@ import Bun from 'bun';
 import { Config } from '@config/config';
 import { HttpErrors } from '@libs/errors/https-errors';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserRepository } from './user.repository';
-import { inject, injectable, named } from 'inversify';
+import { injectable } from 'inversify';
 import { UserUsername } from '@libs/schemas/user-email.schema';
 import { exclude } from './user.util';
 import { sign } from 'hono/jwt';
@@ -16,8 +14,8 @@ import { UserLoginInput, UserWithoutPassword } from './user.interface';
 export class UserService {
 
   public constructor(
-    @inject(SERVICE_IDENTIFIER.Config) private config: Config,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_repository) private userRepository: UserRepository,
+    private readonly config: Config,
+    private readonly userRepository: UserRepository,
   ) { }
 
   // TODO: décaler le create et login dans le auth

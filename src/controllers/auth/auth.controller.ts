@@ -2,12 +2,10 @@ import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
 import { Controller } from '@libs/decorators/controller.decorator';
 import { IController } from '..';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { StatusCodes } from 'http-status-codes';
 import { UserCreateInputSchema, UserSchema, UserLoginInputSchema } from '@libs/user/user.schema';
 import { UserService } from '@libs/user/user.service';
-import { inject, injectable, named } from 'inversify';
+import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { Prisma } from '@prisma/client';
 import { UserLoginInput } from '@libs/user/user.interface';
@@ -15,8 +13,8 @@ import { UserLoginInput } from '@libs/user/user.interface';
 @injectable()
 export class AuthController implements IController {
   public constructor(
-    @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_service) private userService: UserService,
+    private readonly server: App,
+    private readonly userService: UserService,
   ) { }
 
 

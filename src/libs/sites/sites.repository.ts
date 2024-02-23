@@ -1,14 +1,13 @@
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { AppOrm } from '@libs/core/orm/orm';
 import { TypeguardUtils } from '@libs/utils/typeguard';
 import { Prisma, Sites } from '@prisma/client';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
 @injectable()
 export class SitesRepository {
 
   constructor(
-    @inject(SERVICE_IDENTIFIER.Orm) private orm: AppOrm,
+    private readonly orm: AppOrm,
   ) { }
 
   public async create(siteInput: Prisma.SitesUncheckedCreateInput): Promise<Sites> {

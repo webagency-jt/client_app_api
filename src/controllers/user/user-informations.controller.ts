@@ -3,20 +3,18 @@ import { App } from '@libs/core/server/server';
 import { Controller } from '@libs/decorators/controller.decorator';
 import { IController } from '..';
 import { Prisma } from '@prisma/client';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { StatusCodes } from 'http-status-codes';
 import { UserInformationsCreateInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
 import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
-import { injectable, inject, named } from 'inversify';
+import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { z } from '@hono/zod-openapi';
 
 @injectable()
 export class UserInformationsController implements IController {
   public constructor(
-    @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_informations_service) private userInformationsService: UserInformationsService,
+    private readonly server: App,
+    private readonly userInformationsService: UserInformationsService,
   ) { }
 
   public setup(): any {

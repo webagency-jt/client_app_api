@@ -1,13 +1,12 @@
 import { AppOrm } from '@libs/core/orm/orm';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { Prisma, UserSettings } from '@prisma/client';
 
 @injectable()
 export class UserSettingsRepository {
 
   public constructor(
-    @inject(SERVICE_IDENTIFIER.Orm) public orm: AppOrm,
+    public readonly orm: AppOrm,
   ) { }
 
   public async upsert(userSettingsInput: Prisma.UserSettingsUncheckedCreateInput): Promise<UserSettings> {

@@ -1,8 +1,6 @@
 import { App } from '@libs/core/server/server';
 import { IController } from '..';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
-import { injectable, inject, named } from 'inversify';
+import { injectable } from 'inversify';
 import { UserService } from '@libs/user/user.service';
 import { Controller } from '@libs/decorators/controller.decorator';
 import * as hono from 'hono';
@@ -14,9 +12,9 @@ import { AdminGuard } from '@libs/guards/admin.guard';
 @injectable()
 export class UserController implements IController {
   public constructor(
-    @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_service) private readonly userService: UserService,
-    @inject(SERVICE_IDENTIFIER.Guards) @named(SERVICE_NAME.guards.admin) private readonly adminGuard: AdminGuard,
+    private readonly server: App,
+    private readonly userService: UserService,
+    private readonly adminGuard: AdminGuard,
   ) { }
 
 

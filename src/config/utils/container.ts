@@ -6,8 +6,6 @@ import { Config } from '@config/config';
 import { Container } from 'inversify';
 import { ControllerRoot } from '@controller/index';
 import { NotificationsController } from '@controller/notifications/notifications.controller';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserController } from '@controller/user/user.controller';
 import { UserRepository } from '@libs/user/user.repository';
 import { UserService } from '@libs/user/user.service';
@@ -23,54 +21,57 @@ import { SitesRepository } from '@libs/sites/sites.repository';
 import { SitesService } from '@libs/sites/sites.service';
 import { AdminGuard } from '@libs/guards/admin.guard';
 
+/**
+ * learning scopes
+ * @link https://www.c-sharpcorner.com/article/differences-between-scoped-transient-and-singleton-service/
+ */
 export function bindContainer(container: Container): void {
   /* #region Singleton Class */
-  container.bind(SERVICE_IDENTIFIER.App).to(App).inSingletonScope();
-  container.bind(SERVICE_IDENTIFIER.Config).to(Config).inSingletonScope();
-  container.bind(SERVICE_IDENTIFIER.Logger).to(AppLogger).inSingletonScope();
-  container.bind(SERVICE_IDENTIFIER.Orm).to(AppOrm).inSingletonScope();
-  container.bind(SERVICE_IDENTIFIER.Libs).to(JwtMiddleware).inSingletonScope()
-    .whenTargetNamed(SERVICE_NAME.middleware.jwt_middleware);
+  container.bind(App).toSelf().inSingletonScope();
+  container.bind(Config).toSelf().inSingletonScope();
+  container.bind(AppLogger).toSelf().inSingletonScope();
+  container.bind(AppOrm).toSelf().inSingletonScope();
+  container.bind(JwtMiddleware).toSelf().inRequestScope();
   /* #endregion */
 
   /* #region Libs */
-  container.bind(SERVICE_IDENTIFIER.Libs).to(UserRepository)
-    .whenTargetNamed(SERVICE_NAME.libs.user_repository);
-  container.bind(SERVICE_IDENTIFIER.Libs).to(UserService)
-    .whenTargetNamed(SERVICE_NAME.libs.user_service);
-  container.bind(SERVICE_IDENTIFIER.Libs).to(UserSettingsRepository)
-    .whenTargetNamed(SERVICE_NAME.libs.user_settings_repository);
-  container.bind(SERVICE_IDENTIFIER.Libs).to(UserSettingsService)
-    .whenTargetNamed(SERVICE_NAME.libs.user_settings_service);
-  container.bind(SERVICE_IDENTIFIER.Libs).to(UserInformationsRepository)
-    .whenTargetNamed(SERVICE_NAME.libs.user_informations_repository);
-  container.bind(SERVICE_IDENTIFIER.Libs).to(UserInformationsService)
-    .whenTargetNamed(SERVICE_NAME.libs.user_informations_service);
-  container.bind(SERVICE_IDENTIFIER.Libs).to(SitesRepository)
-    .whenTargetNamed(SERVICE_NAME.libs.site_repository);
-  container.bind(SERVICE_IDENTIFIER.Libs).to(SitesService)
-    .whenTargetNamed(SERVICE_NAME.libs.site_service);
+  container.bind(UserRepository).toSelf()
+    .inRequestScope();
+  container.bind(UserService).toSelf()
+    .inRequestScope();
+  container.bind(UserSettingsRepository).toSelf()
+    .inRequestScope();
+  container.bind(UserSettingsService).toSelf()
+    .inRequestScope();
+  container.bind(UserInformationsRepository).toSelf()
+    .inRequestScope();
+  container.bind(UserInformationsService).toSelf()
+    .inRequestScope();
+  container.bind(SitesRepository).toSelf()
+    .inRequestScope();
+  container.bind(SitesService).toSelf()
+    .inRequestScope();
   /* #endregion */
 
   /* #region Guards */
-  container.bind(SERVICE_IDENTIFIER.Guards).to(AdminGuard).inSingletonScope()
-    .whenTargetNamed(SERVICE_NAME.guards.admin);
+  container.bind(AdminGuard).toSelf()
+    .inRequestScope();
   /* #endregion */
 
   /* #region Controller */
-  container.bind(SERVICE_IDENTIFIER.Controller).to(ControllerRoot)
-    .whenTargetNamed(SERVICE_NAME.controllers.root);
-  container.bind(SERVICE_IDENTIFIER.Controller).to(UserController)
-    .whenTargetNamed(SERVICE_NAME.controllers.user);
-  container.bind(SERVICE_IDENTIFIER.Controller).to(NotificationsController)
-    .whenTargetNamed(SERVICE_NAME.controllers.notifications);
-  container.bind(SERVICE_IDENTIFIER.Controller).to(AuthController)
-    .whenTargetNamed(SERVICE_NAME.controllers.auth);
-  container.bind(SERVICE_IDENTIFIER.Controller).to(UsersRootController)
-    .whenTargetNamed(SERVICE_NAME.controllers.user_root);
-  container.bind(SERVICE_IDENTIFIER.Controller).to(UserSettingsController)
-    .whenTargetNamed(SERVICE_NAME.controllers.user_settings);
-  container.bind(SERVICE_IDENTIFIER.Controller).to(UserInformationsController)
-    .whenTargetNamed(SERVICE_NAME.controllers.user_informations);
+  container.bind(ControllerRoot).toSelf()
+    .inRequestScope();
+  container.bind(UserController).toSelf()
+    .inRequestScope();
+  container.bind(NotificationsController).toSelf()
+    .inRequestScope();
+  container.bind(AuthController).toSelf()
+    .inRequestScope();
+  container.bind(UsersRootController).toSelf()
+    .inRequestScope();
+  container.bind(UserSettingsController).toSelf()
+    .inRequestScope();
+  container.bind(UserInformationsController).toSelf()
+    .inRequestScope();
   /* #endregion */
 }
