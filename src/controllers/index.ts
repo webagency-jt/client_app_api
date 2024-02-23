@@ -8,9 +8,7 @@ import { injectable, inject, named } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { AuthController } from './auth/auth.controller';
 import { UsersRootController } from './user';
-import { ControllerTest } from '@libs/core/decorators/controller.decorator';
-import { Get } from '@libs/core/decorators/request.decorator';
-import { Request } from '@libs/core/decorators/context.decorator';
+import { Get } from '@libs/core/decorators/controller.decorator';
 
 export interface IController {
   // Where root will be loaded
@@ -18,7 +16,6 @@ export interface IController {
 }
 
 @injectable()
-@ControllerTest()
 export class ControllerRoot implements IController {
   public constructor(
     @inject(SERVICE_IDENTIFIER.App) private server: App,
@@ -36,18 +33,17 @@ export class ControllerRoot implements IController {
     this.test();
   }
 
-  @Controller({
+  @Get({
     method: 'get',
     path: '/cc',
     responses: {},
   })
-  public test(ctx?: hono.Context, @Request() test?: any) {
+  public test(ctx?: hono.Context, test?: any) {
     console.log('test', test);
 
     if (ctx) {
       return ctx.json('cc');
     };
-
   }
 
   @Controller({
