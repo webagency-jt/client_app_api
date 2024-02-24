@@ -31,7 +31,7 @@ async function secureRouteHandler(ctx: any, route: any) {
   }
 }
 
-function test(options: RouteParameters, requestType: RequestMethod, target: any) {
+function controllerHandler(options: RouteParameters, requestType: RequestMethod, target: any, thisArg: any) {
   const server: App = Reflect.getMetadata(SERVER, SERVER_TARGET);
   // Define route
   const { guards, secureRoute, ...routeMetadata } = options;
@@ -48,7 +48,7 @@ function test(options: RouteParameters, requestType: RequestMethod, target: any)
     if (guards) {
       guardHandle(guards);
     }
-    return target.call(target, ctx);
+    return target.call(thisArg, ctx);
   }, (result, c) => {
     if (!result.success) {
       console.error(result.error);
@@ -69,12 +69,13 @@ function test(options: RouteParameters, requestType: RequestMethod, target: any)
  */
 export function createFunctionParameters(type: RequestMethod) {
   return (routeParameters: RouteParameters) => {
-    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+    return (target: any, propertyKey: string, descriptor: PropertyDescriptor): void | TypedPropertyDescriptor<any> => {
       const original = target[propertyKey];
       return {
         ...descriptor,
         value() {
-          return test(routeParameters, type, original);
+          // At the moment controller function cannot have other parameter than ctx
+          return controllerHandler(routeParameters, type, original, this);
         },
       };
     };
