@@ -6,6 +6,7 @@ import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { z } from 'zod';
 import { JwtMiddleware } from '@libs/core/middlewares/jwt.middleware';
+import { Get } from '@libs/core/decorators/controller.decorator';
 
 @injectable()
 export class NotificationsController implements IController {
@@ -22,8 +23,7 @@ export class NotificationsController implements IController {
     this.getNotification();
   }
 
-  @Controller({
-    method: 'get',
+  @Get({
     path: '/notifications',
     responses: {
       200: {

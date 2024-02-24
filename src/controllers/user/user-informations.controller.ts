@@ -9,6 +9,7 @@ import { UserInformationsService } from '@libs/user/modules/user-informations/us
 import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { z } from '@hono/zod-openapi';
+import { Get, Post, Put } from '@libs/core/decorators/controller.decorator';
 
 @injectable()
 export class UserInformationsController implements IController {
@@ -24,8 +25,7 @@ export class UserInformationsController implements IController {
   }
 
 
-  @Controller({
-    method: 'post',
+  @Post({
     path: '/users/informations',
     request: {
       body: {
@@ -38,6 +38,7 @@ export class UserInformationsController implements IController {
     },
     responses: {
       200: {
+        description: 'to do',
         content: {
           'application/json': {
             schema: UserInformationsSchema,
@@ -56,8 +57,7 @@ export class UserInformationsController implements IController {
     };
   }
 
-  @Controller({
-    method: 'get',
+  @Get({
     path: '/users/informations/{userId}',
     request: {
       params: z.object({
@@ -65,7 +65,8 @@ export class UserInformationsController implements IController {
       }),
     },
     responses: {
-      200: {
+      '200': {
+        description: 'todo',
         content: {
           'application/json': {
             schema: UserInformationsSchema,
@@ -83,8 +84,7 @@ export class UserInformationsController implements IController {
     };
   }
 
-  @Controller({
-    method: 'put',
+  @Put({
     secureRoute: true,
     path: '/users/informations',
     request: {
@@ -98,6 +98,7 @@ export class UserInformationsController implements IController {
     },
     responses: {
       200: {
+        description: 'todo',
         content: {
           'application/json': {
             schema: UserInformationsSchema,

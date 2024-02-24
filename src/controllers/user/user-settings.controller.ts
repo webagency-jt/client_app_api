@@ -7,6 +7,7 @@ import { UserSettingsInputSchema, UserSettingsSchema } from '@libs/user/modules/
 import { UserSettingsService } from '@libs/user/modules/user-settings/user-settings.service';
 import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
+import { Patch } from '@libs/core/decorators/controller.decorator';
 
 @injectable()
 export class UserSettingsController implements IController {
@@ -20,8 +21,7 @@ export class UserSettingsController implements IController {
   }
 
 
-  @Controller({
-    method: 'patch',
+  @Patch({
     path: '/users/settings',
     request: {
       body: {
@@ -34,6 +34,7 @@ export class UserSettingsController implements IController {
     },
     responses: {
       200: {
+        description: 'todo',
         content: {
           'application/json': {
             schema: UserSettingsSchema,

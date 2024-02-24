@@ -7,6 +7,7 @@ import * as hono from 'hono';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { UserUsername, userUsernameSchema } from '@libs/schemas/user-email.schema';
 import { AdminGuard } from '@libs/guards/admin.guard';
+import { Post } from '@libs/core/decorators/controller.decorator';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
@@ -22,8 +23,7 @@ export class UserController implements IController {
     this.exist();
   }
 
-  @Controller({
-    method: 'post',
+  @Post({
     path: '/users/exist',
     request: {
       body: {

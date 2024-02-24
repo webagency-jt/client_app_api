@@ -42,8 +42,7 @@ export class ControllerRoot implements IController {
     }
   }
 
-  @Controller({
-    method: 'get',
+  @Get({
     path: '/',
     responses: {},
   })
