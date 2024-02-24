@@ -1,5 +1,4 @@
 import * as hono from 'hono';
-import { App } from '@libs/core/server/server';
 import { IController } from '..';
 import { Prisma } from '@prisma/client';
 import { UserSettingsInputSchema, UserSettingsSchema } from '@libs/user/modules/user-settings/user-settings.schema';
@@ -11,7 +10,6 @@ import { Patch } from '@libs/core/decorators/controller.decorator';
 @injectable()
 export class UserSettingsController implements IController {
   public constructor(
-    private readonly server: App,
     private readonly userSettingsService: UserSettingsService,
   ) { }
 

@@ -1,5 +1,4 @@
 import * as hono from 'hono';
-import { App } from '@libs/core/server/server';
 import { NotificationsController } from './notifications/notifications.controller';
 import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
@@ -15,7 +14,6 @@ export interface IController {
 @injectable()
 export class ControllerRoot implements IController {
   public constructor(
-    private readonly server: App,
     private readonly usersRootController: UsersRootController,
     private readonly authController: AuthController,
     private readonly notificationsController: NotificationsController,

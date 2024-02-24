@@ -1,4 +1,3 @@
-import { App } from '@libs/core/server/server';
 import { IController } from '..';
 import { injectable } from 'inversify';
 import { UserService } from '@libs/user/user.service';
@@ -12,7 +11,6 @@ import { Post } from '@libs/core/decorators/controller.decorator';
 @injectable()
 export class UserController implements IController {
   public constructor(
-    private readonly server: App,
     private readonly userService: UserService,
     private readonly adminGuard: AdminGuard,
   ) { }

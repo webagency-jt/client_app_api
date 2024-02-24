@@ -1,5 +1,4 @@
 import * as hono from 'hono';
-import { App } from '@libs/core/server/server';
 import { IController } from '..';
 import { StatusCodes } from 'http-status-codes';
 import { UserCreateInputSchema, UserSchema, UserLoginInputSchema } from '@libs/user/user.schema';
@@ -13,7 +12,6 @@ import { Post } from '@libs/core/decorators/controller.decorator';
 @injectable()
 export class AuthController implements IController {
   public constructor(
-    private readonly server: App,
     private readonly userService: UserService,
   ) { }
 

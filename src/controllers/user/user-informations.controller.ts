@@ -1,5 +1,4 @@
 import * as hono from 'hono';
-import { App } from '@libs/core/server/server';
 import { IController } from '..';
 import { Prisma } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
@@ -13,7 +12,6 @@ import { Get, Post, Put } from '@libs/core/decorators/controller.decorator';
 @injectable()
 export class UserInformationsController implements IController {
   public constructor(
-    private readonly server: App,
     private readonly userInformationsService: UserInformationsService,
   ) { }
 
