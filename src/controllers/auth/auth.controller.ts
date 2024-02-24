@@ -7,7 +7,8 @@ import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { Prisma } from '@prisma/client';
 import { UserLoginInput } from '@libs/user/user.interface';
-import { Post } from '@libs/core/decorators/controller.decorator';
+import { Post } from '@libs/core/decorators/parameters.decorator';
+
 
 @injectable()
 export class AuthController implements IController {
@@ -65,7 +66,6 @@ export class AuthController implements IController {
     };
   }
 
-  // TODO: add strategy to local login or next auth login
   @Post({
     path: '/auth/login',
     request: {

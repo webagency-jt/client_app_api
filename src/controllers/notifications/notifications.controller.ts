@@ -5,7 +5,7 @@ import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { z } from 'zod';
 import { JwtMiddleware } from '@libs/core/middlewares/jwt.middleware';
-import { Get } from '@libs/core/decorators/controller.decorator';
+import { Get } from '@libs/core/decorators/parameters.decorator';
 
 @injectable()
 export class NotificationsController implements IController {

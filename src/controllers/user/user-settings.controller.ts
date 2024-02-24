@@ -5,7 +5,7 @@ import { UserSettingsInputSchema, UserSettingsSchema } from '@libs/user/modules/
 import { UserSettingsService } from '@libs/user/modules/user-settings/user-settings.service';
 import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
-import { Patch } from '@libs/core/decorators/controller.decorator';
+import { Patch } from '@libs/core/decorators/parameters.decorator';
 
 @injectable()
 export class UserSettingsController implements IController {

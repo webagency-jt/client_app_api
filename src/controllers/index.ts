@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { AuthController } from './auth/auth.controller';
 import { UsersRootController } from './user';
-import { Get } from '@libs/core/decorators/controller.decorator';
+import { Get } from '@libs/core/decorators/parameters.decorator';
 
 export interface IController {
   // Where root will be loaded
@@ -31,7 +31,7 @@ export class ControllerRoot implements IController {
     path: '/cc',
     responses: {},
   })
-  public test(ctx?: hono.Context) {
+  public test(ctx?: hono.Context): unknown {
     if (ctx) {
       return ctx.json({
         salut: 'mathys',
