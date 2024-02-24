@@ -1,6 +1,5 @@
 import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller.decorator';
 import { IController } from '..';
 import { Prisma } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';

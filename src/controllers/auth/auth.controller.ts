@@ -1,6 +1,5 @@
 import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller.decorator';
 import { IController } from '..';
 import { StatusCodes } from 'http-status-codes';
 import { UserCreateInputSchema, UserSchema, UserLoginInputSchema } from '@libs/user/user.schema';

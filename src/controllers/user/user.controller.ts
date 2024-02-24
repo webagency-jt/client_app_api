@@ -2,7 +2,6 @@ import { App } from '@libs/core/server/server';
 import { IController } from '..';
 import { injectable } from 'inversify';
 import { UserService } from '@libs/user/user.service';
-import { Controller } from '@libs/decorators/controller.decorator';
 import * as hono from 'hono';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { UserUsername, userUsernameSchema } from '@libs/schemas/user-email.schema';

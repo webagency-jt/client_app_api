@@ -1,6 +1,5 @@
 import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller.decorator';
 import { NotificationsController } from './notifications/notifications.controller';
 import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
