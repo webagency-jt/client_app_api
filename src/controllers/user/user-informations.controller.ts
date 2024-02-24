@@ -7,7 +7,9 @@ import { UserInformationsService } from '@libs/user/modules/user-informations/us
 import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { z } from '@hono/zod-openapi';
-import { Get, Post, Put } from '@libs/core/decorators/controller.decorator';
+import { Guard } from '@libs/core/decorators/guard.decorator';
+import { AdminGuard } from '@libs/guards/admin.guard';
+import { Post, Get, Put } from '@libs/core/decorators/parameters.decorator';
 
 @injectable()
 export class UserInformationsController implements IController {
@@ -72,6 +74,7 @@ export class UserInformationsController implements IController {
       },
     },
   })
+  @Guard([AdminGuard])
   private async getSettings(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
@@ -85,6 +88,9 @@ export class UserInformationsController implements IController {
     secureRoute: true,
     path: '/users/informations',
     request: {
+      headers: z.object({
+        'Authorization': z.unknown(),
+      }),
       body: {
         content: {
           'application/json': {

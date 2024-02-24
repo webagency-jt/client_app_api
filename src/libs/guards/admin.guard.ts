@@ -1,4 +1,4 @@
-import { GuardAbstract } from './guard.absract';
+import { GuardAbstract } from '../core/guards/guard.absract';
 import * as hono from 'hono';
 import { $Enums, User } from '@prisma/client';
 import { HttpErrors } from '@libs/errors/https-errors';
@@ -9,7 +9,7 @@ import { injectable } from 'inversify';
 export class AdminGuard extends GuardAbstract {
   public run(ctx: hono.Context): void {
     const user = ctx.get('jwtPayload') as User;
-    if (user.role === $Enums.UserRole.user) {
+    if (user.role !== $Enums.UserRole.admin) {
       throw new HttpErrors(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
     }
   }

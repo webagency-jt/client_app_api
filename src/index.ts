@@ -15,7 +15,7 @@ import { logger } from 'hono/logger';
 import { mapPrismaClientErrors } from '@libs/errors/prisma.error';
 import { sentry } from '@hono/sentry';
 import { swaggerUI } from '@hono/swagger-ui';
-import { SERVER, SERVER_TARGET } from '@libs/core/constant';
+import { CONTAINER, SERVER, SERVER_TARGET } from '@libs/core/constant';
 import { BootstrapContainer } from '@libs/core/bootstrap/container';
 
 // Initialize Hono
@@ -24,6 +24,7 @@ const appInstance = container.get(App);
 const app = appInstance.hono;
 
 Reflect.defineMetadata(SERVER, appInstance, SERVER_TARGET);
+Reflect.defineMetadata(CONTAINER, container, SERVER_TARGET);
 
 // Initialize Config
 const config = container.get(Config);
@@ -65,6 +66,9 @@ if (env === ENV_ENUM.DEV) {
       version: 'v1',
     },
     openapi: '3.1.0',
+    servers: [{
+      url: '',
+    }],
   });
 }
 

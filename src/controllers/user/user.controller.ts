@@ -4,15 +4,13 @@ import { UserService } from '@libs/user/user.service';
 import * as hono from 'hono';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { UserUsername, userUsernameSchema } from '@libs/schemas/user-email.schema';
-import { AdminGuard } from '@libs/guards/admin.guard';
-import { Post } from '@libs/core/decorators/controller.decorator';
+import { Post } from '@libs/core/decorators/parameters.decorator';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
 export class UserController implements IController {
   public constructor(
     private readonly userService: UserService,
-    private readonly adminGuard: AdminGuard,
   ) { }
 
 
@@ -32,7 +30,6 @@ export class UserController implements IController {
       },
     },
     responses: {},
-    guards: [],
   })
   private async exist(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
