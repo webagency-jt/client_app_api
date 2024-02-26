@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import { App } from '@libs/core/server/server';
 import { AppLogger } from '@libs/core/logger/logger';
-import { Config, ENV_ENUM } from '@config/config';
+import { Config, ENV_STATE_ENUM } from '@config/config';
 import { ControllerRoot } from './controllers';
 import { HTTPException } from 'hono/http-exception';
 import { HttpErrors, isErrorReturnGuard } from '@libs/errors/https-errors';
@@ -17,6 +17,7 @@ import { sentry } from '@hono/sentry';
 import { swaggerUI } from '@hono/swagger-ui';
 import { CONTAINER, SERVER, SERVER_TARGET } from '@libs/core/constant';
 import { BootstrapContainer } from '@libs/core/bootstrap/container';
+import { EnvEnum } from './config/enums/env.enum';
 
 // Initialize Hono
 const container = BootstrapContainer.Container;
@@ -34,8 +35,8 @@ config.validateEnv();
 const appLogger = container.get(AppLogger);
 
 // Setup sentry
-const env = config.get<ENV_ENUM>('ENV');
-const sentryPrivate = config.get<string>('SENTRY_DSN');
+const env = config.get<ENV_STATE_ENUM>(EnvEnum.ENV);
+const sentryPrivate = config.get<string>(EnvEnum.SENTRY_DSN);
 if (sentryPrivate) {
   app.use('*', sentry({
     dsn: sentryPrivate,
@@ -44,7 +45,7 @@ if (sentryPrivate) {
   }));
 }
 
-const withLog = config.get<boolean>('LOGGER');
+const withLog = config.get<boolean>(EnvEnum.LOGGER);
 if (withLog) {
   // Setup Logger for Hono
   const customLogger = (message: any, ...rest: string[]) => {
@@ -53,13 +54,14 @@ if (withLog) {
   app.use('*', logger(customLogger));
 }
 
-if (env === ENV_ENUM.DEV) {
+if (env === ENV_STATE_ENUM.DEV) {
   // Setup swagger
   app.get('/swagger', swaggerUI({
     url: '/doc',
   }));
 
   // Setup open api
+  const formattedUrl = `${config.get(EnvEnum.URL)}:${config.get(EnvEnum.PORT)}`;
   app.doc('doc', {
     info: {
       title: 'Aecreator Api',
@@ -67,13 +69,13 @@ if (env === ENV_ENUM.DEV) {
     },
     openapi: '3.1.0',
     servers: [{
-      url: '',
+      url: formattedUrl,
     }],
   });
 }
 
 // Setup security
-const origin = config.get<string>('ORIGINS').split(',');
+const origin = config.get<string>(EnvEnum.ORIGINS).split(',');
 app.use('*',
   cors({
     origin,
@@ -115,7 +117,7 @@ const controllerRoot = container.get(ControllerRoot);
 controllerRoot.setup();
 
 // Set app port
-const port = config.get<number>('PORT');
+const port = config.get<number>(EnvEnum.PORT);
 
 appLogger.pino.info(`Hono 🥟 Server Listening on port ${port}`);
 

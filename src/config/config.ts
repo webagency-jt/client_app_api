@@ -1,7 +1,7 @@
 import { SafeParseError, TypeOf, ZodError, z } from 'zod';
 import { injectable } from 'inversify';
 
-export enum ENV_ENUM {
+export enum ENV_STATE_ENUM {
   PROD = 'PROD',
   DEV = 'DEV',
 }
@@ -16,7 +16,7 @@ function hashError(safeParseReturn: any): safeParseReturn is SafeParseError<ZodE
 const withDevDefault = <T extends z.ZodTypeAny>(
   schema: T,
   val: TypeOf<T>
-) => (process.env.ENV !== ENV_ENUM.PROD ? schema.default(val) : schema);
+) => (process.env.ENV !== ENV_STATE_ENUM.PROD ? schema.default(val) : schema);
 
 @injectable()
 export class Config {
@@ -26,12 +26,14 @@ export class Config {
   public validateEnv(): void {
     const schema = z.object({
       PORT: withDevDefault(z.string(), '3000').transform(Number),
-      ENV: withDevDefault(z.nativeEnum(ENV_ENUM), ENV_ENUM.DEV),
+      ENV: withDevDefault(z.nativeEnum(ENV_STATE_ENUM), ENV_STATE_ENUM.DEV),
+      URL: withDevDefault(z.string(), 'http://localhost'),
       DATABASE_URL: withDevDefault(z.string(), '3000'),
+      DATABASE_NAME: withDevDefault(z.string(), 'webAgency'),
       ORIGINS: withDevDefault(z.string(), '*'),
       LOGGER: withDevDefault(z.string().transform(Boolean), true),
       SENTRY_DSN: withDevDefault(z.string(), ''),
-      JWT_TOKEN: withDevDefault(z.string(), ''),
+      JWT_TOKEN: withDevDefault(z.string(), 'r7UvT9fzcUFeHp4mzI0LJqVZ8GEMS3UDtsc'),
       SALT_ROUND: withDevDefault(z.string().transform(Number), 5),
     });
 

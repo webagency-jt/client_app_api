@@ -9,6 +9,7 @@ import { exclude } from './user.util';
 import { sign } from 'hono/jwt';
 import { Prisma } from '@prisma/client';
 import { UserLoginInput, UserWithoutPassword } from './user.interface';
+import { EnvEnum } from '@config/enums/env.enum';
 
 @injectable()
 export class UserService {
@@ -20,7 +21,7 @@ export class UserService {
 
   // TODO: décaler le create et login dans le auth
   public async create(user: Prisma.UserCreateInput): Promise<UserWithoutPassword> {
-    const saltRound = this.config.get<number>('SALT_ROUND');
+    const saltRound = this.config.get<number>(EnvEnum.SALT_ROUND);
     const password = user.password ?? '';
     const hashedPassword = await Bun.password.hash(password, {
       algorithm: 'bcrypt',
@@ -40,7 +41,7 @@ export class UserService {
       const isMatch = await Bun.password.verify(password, userPassword);
       if (isMatch) {
         const userWithoutPassword = exclude(userFound, ['password']);
-        const jwtSecret = this.config.get<string>('JWT_TOKEN');
+        const jwtSecret = this.config.get<string>(EnvEnum.JWT_TOKEN);
         const token = await sign(userWithoutPassword, jwtSecret);
         return {
           ...userWithoutPassword,
