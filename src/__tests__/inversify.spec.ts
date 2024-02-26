@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import { AppLogger } from '@libs/core/logger/logger';
 import { Container } from 'inversify';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
 import { beforeAll, describe, expect, it } from 'bun:test';
 import { bindContainer } from '@config/utils/container';
 
@@ -17,7 +16,7 @@ describe('Inversify binding test', () => {
   });
 
   it('Should resolve appLogger', () => {
-    const appLogger = container.get<AppLogger>(SERVICE_IDENTIFIER.Logger);
+    const appLogger = container.get(AppLogger);
     expect(appLogger).toBeDefined();
     // Checking type
     expect(appLogger).toBeInstanceOf(AppLogger);
