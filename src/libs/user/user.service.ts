@@ -2,27 +2,26 @@ import Bun from 'bun';
 import { Config } from '@config/config';
 import { HttpErrors } from '@libs/errors/https-errors';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserRepository } from './user.repository';
-import { inject, injectable, named } from 'inversify';
-import { UserEmail } from '@libs/schemas/user-email.schema';
+import { injectable } from 'inversify';
+import { UserUsername } from '@libs/schemas/user-email.schema';
 import { exclude } from './user.util';
 import { sign } from 'hono/jwt';
 import { Prisma } from '@prisma/client';
 import { UserLoginInput, UserWithoutPassword } from './user.interface';
+import { EnvEnum } from '@config/enums/env.enum';
 
 @injectable()
 export class UserService {
 
   public constructor(
-    @inject(SERVICE_IDENTIFIER.Config) private config: Config,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_repository) private userRepository: UserRepository,
+    private readonly config: Config,
+    private readonly userRepository: UserRepository,
   ) { }
 
   // TODO: décaler le create et login dans le auth
   public async create(user: Prisma.UserCreateInput): Promise<UserWithoutPassword> {
-    const saltRound = this.config.get<number>('SALT_ROUND');
+    const saltRound = this.config.get<number>(EnvEnum.SALT_ROUND);
     const password = user.password ?? '';
     const hashedPassword = await Bun.password.hash(password, {
       algorithm: 'bcrypt',
@@ -34,15 +33,15 @@ export class UserService {
     return userWithoutPassword;
   }
 
-  public async login(user: UserLoginInput): Promise<UserWithoutPassword & { token: string }> {
-    const userFound = await this.userRepository.findUniqueByEmail(user.email);
+  public async login(user: UserLoginInput): Promise<UserWithoutPassword & { token: string; }> {
+    const userFound = await this.userRepository.findUniqueByUsername(user.username);
     if (userFound) {
       const userPassword = userFound.password ?? '';
       const password = user.password ?? '';
       const isMatch = await Bun.password.verify(password, userPassword);
       if (isMatch) {
         const userWithoutPassword = exclude(userFound, ['password']);
-        const jwtSecret = this.config.get<string>('JWT_TOKEN');
+        const jwtSecret = this.config.get<string>(EnvEnum.JWT_TOKEN);
         const token = await sign(userWithoutPassword, jwtSecret);
         return {
           ...userWithoutPassword,
@@ -50,15 +49,15 @@ export class UserService {
         };
       } else {
         // For security reason we will never tell if the user exist or not
-        throw new HttpErrors(`User '${user.email}' ${ReasonPhrases.NOT_FOUND}`, StatusCodes.NOT_FOUND);
+        throw new HttpErrors(`User '${user.username}' ${ReasonPhrases.NOT_FOUND}`, StatusCodes.NOT_FOUND);
       }
     } else {
-      throw new HttpErrors(`User '${user.email}' ${ReasonPhrases.NOT_FOUND}`, StatusCodes.NOT_FOUND);
+      throw new HttpErrors(`User '${user.username}' ${ReasonPhrases.NOT_FOUND}`, StatusCodes.NOT_FOUND);
     }
   }
 
-  public async exist(user: UserEmail): Promise<boolean | null> {
-    const userExist = await this.userRepository.findUniqueByEmail(user.email);
+  public async exist(user: UserUsername): Promise<boolean | null> {
+    const userExist = await this.userRepository.findUniqueByUsername(user.username);
     return !!userExist;
   }
 }

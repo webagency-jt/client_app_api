@@ -1,6 +1,10 @@
 
 export class TypeguardUtils {
-  static isStringGuard(object: unknown): object is string {
+  static isString(object: unknown): object is string {
     return typeof object === 'string';
+  }
+
+  static isUndefined(object: unknown): object is undefined {
+    return typeof object === 'undefined';
   }
 }

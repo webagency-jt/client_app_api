@@ -46,13 +46,23 @@ export const UserInformationsCreateInputSchema = OpenapiFactory.generateSchema<P
     },
     {
       required: true,
-      type: 'string',
+      type: 'number',
       name: 'tva',
     },
     {
       required: true,
       type: 'string',
       name: 'zip',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'email',
+      rules: [
+        {
+          functionName: 'email',
+        },
+      ],
     },
   ],
 });
@@ -102,13 +112,23 @@ export const UserInformationsUpdateInputSchema = OpenapiFactory.generateSchema<P
     },
     {
       required: false,
-      type: 'string',
+      type: 'number',
       name: 'tva',
     },
     {
       required: false,
       type: 'string',
       name: 'zip',
+    },
+    {
+      required: false,
+      type: 'string',
+      name: 'email',
+      rules: [
+        {
+          functionName: 'email',
+        },
+      ],
     },
   ],
 });
@@ -165,13 +185,23 @@ export const UserInformationsSchema = OpenapiFactory.generateSchema<UserInformat
     },
     {
       required: true,
-      type: 'string',
+      type: 'number',
       name: 'tva',
     },
     {
       required: true,
       type: 'string',
       name: 'zip',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'email',
+      rules: [
+        {
+          functionName: 'email',
+        },
+      ],
     },
   ],
 });

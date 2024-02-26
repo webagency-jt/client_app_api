@@ -1,19 +1,17 @@
 import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller';
 import { IController } from '..';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { injectable, inject, named } from 'inversify';
+import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { z } from 'zod';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { JwtMiddleware } from '@libs/core/middlewares/jwt.middleware';
+import { Get } from '@libs/core/decorators/parameters.decorator';
 
 @injectable()
 export class NotificationsController implements IController {
   public constructor(
-    @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.middleware.jwt_middleware) private jwtMiddleware: JwtMiddleware,
+    private readonly server: App,
+    private readonly jwtMiddleware: JwtMiddleware,
   ) { }
 
   public setup(): void {
@@ -24,8 +22,7 @@ export class NotificationsController implements IController {
     this.getNotification();
   }
 
-  @Controller({
-    method: 'get',
+  @Get({
     path: '/notifications',
     responses: {
       200: {

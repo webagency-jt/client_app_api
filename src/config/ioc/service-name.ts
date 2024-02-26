@@ -20,9 +20,14 @@ const SERVICE_NAME = {
     user_informations_service: 'user_informations_service',
     user_informations_repository: 'user_informations_repository',
     user_service: 'user_service',
+    site_repository: 'site_repository',
+    site_service: 'site_service',
   },
   middleware: {
     jwt_middleware: 'jwt_middleware',
+  },
+  guards: {
+    admin: 'admin',
   },
 };
 

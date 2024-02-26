@@ -9,6 +9,7 @@ const SERVICE_IDENTIFIER = {
   Config: Symbol.for('Config'),
   Logger: Symbol.for('AppLogger'),
   Libs: Symbol.for('Libs'),
+  Guards: Symbol.for('Guards'),
   Orm: Symbol.for('ORM'),
 };
 

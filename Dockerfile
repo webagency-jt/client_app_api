@@ -5,7 +5,9 @@ WORKDIR /usr/src/app
 
 # Define default env variables
 ENV PORT 3000
+ENV URL ''
 ENV DATABASE_URL ''
+ENV DATABASE_NAME ''
 ENV ORIGINS ''
 ENV SENTRY_DSN ''
 ENV ENV=PROD

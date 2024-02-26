@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 import { ErrorReturn } from './https-errors';
 
-// For more informations: https://www.prisma.io/docs/orm/reference/error-reference#prisma-client-query-engine
+/** For more informations: https://www.prisma.io/docs/orm/reference/error-reference#prisma-client-query-engine */
 const PrismaClientErrorMap: { [key: string]: ErrorReturn; } = {
   P2000: {
     message: 'The length of the provided value exceeds the allowed limit for the specified column type.',

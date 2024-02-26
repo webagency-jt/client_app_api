@@ -1,13 +1,10 @@
 import * as hono from 'hono';
-import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller';
 import { NotificationsController } from './notifications/notifications.controller';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
-import { injectable, inject, named } from 'inversify';
+import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { AuthController } from './auth/auth.controller';
 import { UsersRootController } from './user';
+import { Get } from '@libs/core/decorators/parameters.decorator';
 
 export interface IController {
   // Where root will be loaded
@@ -17,11 +14,9 @@ export interface IController {
 @injectable()
 export class ControllerRoot implements IController {
   public constructor(
-    @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.user_root) private usersRootController: UsersRootController,
-    @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.auth) private authController: AuthController,
-    // eslint-disable-next-line max-len
-    @inject(SERVICE_IDENTIFIER.Controller) @named(SERVICE_NAME.controllers.notifications) private notificationsController: NotificationsController,
+    private readonly usersRootController: UsersRootController,
+    private readonly authController: AuthController,
+    private readonly notificationsController: NotificationsController,
   ) { }
 
   public setup(): void {
@@ -29,10 +24,22 @@ export class ControllerRoot implements IController {
     this.authController.setup();
     this.notificationsController.setup();
     this.usersRootController.setup();
+    this.test();
   }
 
-  @Controller({
-    method: 'get',
+  @Get({
+    path: '/cc',
+    responses: {},
+  })
+  public test(ctx?: hono.Context): unknown {
+    if (ctx) {
+      return ctx.json({
+        salut: 'mathys',
+      });
+    }
+  }
+
+  @Get({
     path: '/',
     responses: {},
   })

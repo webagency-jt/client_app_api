@@ -45,6 +45,7 @@
     "scripts",
     "src",
     "migrations",
+    "migration-engine.ts"
   ],
   "exclude": [
     "node_modules"
