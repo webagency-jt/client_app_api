@@ -6,10 +6,11 @@ This repository is the api of the internal client platform
 
 todo list for crud (without permission) each one refer to controller, repository, schema ...
 
-- [ ] User
+- [x] User
+- [ ] Codes
 - [ ] Notifications
 - [x] UserSettings
-- [ ] UserInformations
+- [x] UserInformations
 - [ ] Sites
 - [ ] SitesDetail
 - [ ] Documents

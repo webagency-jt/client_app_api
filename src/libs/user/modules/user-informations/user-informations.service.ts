@@ -1,7 +1,5 @@
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { inject, injectable, named } from 'inversify';
+import { injectable } from 'inversify';
 import { UserInformationsRepository } from './user-informations.repository';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { HttpErrors } from '@libs/errors/https-errors';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { Prisma, UserInformations } from '@prisma/client';
@@ -10,7 +8,7 @@ import { Prisma, UserInformations } from '@prisma/client';
 export class UserInformationsService {
 
   public constructor(
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_informations_repository) private userInformationsRepository: UserInformationsRepository,
+    private readonly userInformationsRepository: UserInformationsRepository,
   ) { }
 
   public async create(userInformationsInput: Prisma.UserInformationsUncheckedCreateInput): Promise<UserInformations> {

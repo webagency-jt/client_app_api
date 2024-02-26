@@ -1,20 +1,17 @@
-import { App } from '@libs/core/server/server';
 import { IController } from '..';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
-import { injectable, inject, named } from 'inversify';
+import { injectable } from 'inversify';
 import { UserService } from '@libs/user/user.service';
-import { Controller } from '@libs/decorators/controller';
 import * as hono from 'hono';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { UserUsername, userUsernameSchema } from '@libs/schemas/user-email.schema';
+import { Post } from '@libs/core/decorators/parameters.decorator';
+import { AuthorizationSchema } from '@libs/schemas/header.schema';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
 export class UserController implements IController {
   public constructor(
-    @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_service) private userService: UserService,
+    private readonly userService: UserService,
   ) { }
 
 
@@ -22,10 +19,10 @@ export class UserController implements IController {
     this.exist();
   }
 
-  @Controller({
-    method: 'post',
+  @Post({
     path: '/users/exist',
     request: {
+      headers: AuthorizationSchema,
       body: {
         content: {
           'application/json': {

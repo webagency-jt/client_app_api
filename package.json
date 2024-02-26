@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "build": "bun run scripts/build.js",
+    "build": "bun run scripts/build.ts",
     "migrate:up": "bun migration-engine.ts up",
     "migrate:down": "bun migration-engine.ts down",
     "migrate:create": "bun migration-engine.ts new --name"

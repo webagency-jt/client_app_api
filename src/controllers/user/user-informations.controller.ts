@@ -1,22 +1,21 @@
 import * as hono from 'hono';
-import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller';
 import { IController } from '..';
 import { Prisma } from '@prisma/client';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { StatusCodes } from 'http-status-codes';
 import { UserInformationsCreateInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
 import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
-import { injectable, inject, named } from 'inversify';
+import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { z } from '@hono/zod-openapi';
+import { Guard } from '@libs/core/decorators/guard.decorator';
+import { AdminGuard } from '@libs/guards/admin.guard';
+import { Post, Get, Put } from '@libs/core/decorators/parameters.decorator';
+import { AuthorizationSchema } from '@libs/schemas/header.schema';
 
 @injectable()
 export class UserInformationsController implements IController {
   public constructor(
-    @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_informations_service) private userInformationsService: UserInformationsService,
+    private readonly userInformationsService: UserInformationsService,
   ) { }
 
   public setup(): any {
@@ -26,10 +25,10 @@ export class UserInformationsController implements IController {
   }
 
 
-  @Controller({
-    method: 'post',
+  @Post({
     path: '/users/informations',
     request: {
+      headers: AuthorizationSchema,
       body: {
         content: {
           'application/json': {
@@ -40,6 +39,7 @@ export class UserInformationsController implements IController {
     },
     responses: {
       200: {
+        description: 'to do',
         content: {
           'application/json': {
             schema: UserInformationsSchema,
@@ -58,16 +58,17 @@ export class UserInformationsController implements IController {
     };
   }
 
-  @Controller({
-    method: 'get',
+  @Get({
     path: '/users/informations/{userId}',
     request: {
+      headers: AuthorizationSchema,
       params: z.object({
         userId: z.string(),
       }),
     },
     responses: {
-      200: {
+      '200': {
+        description: 'todo',
         content: {
           'application/json': {
             schema: UserInformationsSchema,
@@ -76,6 +77,7 @@ export class UserInformationsController implements IController {
       },
     },
   })
+  @Guard([AdminGuard])
   private async getSettings(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
@@ -85,11 +87,11 @@ export class UserInformationsController implements IController {
     };
   }
 
-  @Controller({
-    method: 'put',
+  @Put({
     secureRoute: true,
     path: '/users/informations',
     request: {
+      headers: AuthorizationSchema,
       body: {
         content: {
           'application/json': {
@@ -100,6 +102,7 @@ export class UserInformationsController implements IController {
     },
     responses: {
       200: {
+        description: 'todo',
         content: {
           'application/json': {
             schema: UserInformationsSchema,

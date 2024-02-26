@@ -1,20 +1,17 @@
 import * as hono from 'hono';
-import { App } from '@libs/core/server/server';
-import { Controller } from '@libs/decorators/controller';
 import { IController } from '..';
 import { Prisma } from '@prisma/client';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { SERVICE_NAME } from '@config/ioc/service-name';
 import { UserSettingsInputSchema, UserSettingsSchema } from '@libs/user/modules/user-settings/user-settings.schema';
 import { UserSettingsService } from '@libs/user/modules/user-settings/user-settings.service';
-import { injectable, inject, named } from 'inversify';
+import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
+import { Patch } from '@libs/core/decorators/parameters.decorator';
+import { AuthorizationSchema } from '@libs/schemas/header.schema';
 
 @injectable()
 export class UserSettingsController implements IController {
   public constructor(
-    @inject(SERVICE_IDENTIFIER.App) private server: App,
-    @inject(SERVICE_IDENTIFIER.Libs) @named(SERVICE_NAME.libs.user_settings_service) private userSettingsService: UserSettingsService,
+    private readonly userSettingsService: UserSettingsService,
   ) { }
 
   public setup(): any {
@@ -22,10 +19,10 @@ export class UserSettingsController implements IController {
   }
 
 
-  @Controller({
-    method: 'patch',
+  @Patch({
     path: '/users/settings',
     request: {
+      headers: AuthorizationSchema,
       body: {
         content: {
           'application/json': {
@@ -36,6 +33,7 @@ export class UserSettingsController implements IController {
     },
     responses: {
       200: {
+        description: 'todo',
         content: {
           'application/json': {
             schema: UserSettingsSchema,

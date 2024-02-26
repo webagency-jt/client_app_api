@@ -1,6 +1,5 @@
 import { AppOrm } from '@libs/core/orm/orm';
-import { SERVICE_IDENTIFIER } from '@config/ioc/service-identifier';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { Prisma, UserInformations } from '@prisma/client';
 import { TypeguardUtils } from '@libs/utils/typeguard';
 
@@ -8,7 +7,7 @@ import { TypeguardUtils } from '@libs/utils/typeguard';
 export class UserInformationsRepository {
 
   public constructor(
-    @inject(SERVICE_IDENTIFIER.Orm) public orm: AppOrm,
+    public readonly orm: AppOrm,
   ) { }
 
   public async findUnique(userId: string): Promise<UserInformations | null> {
