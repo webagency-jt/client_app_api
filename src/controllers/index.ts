@@ -5,38 +5,28 @@ import { isContextDefined } from '@libs/core/helpers/context';
 import { AuthController } from './auth/auth.controller';
 import { UsersRootController } from './user';
 import { Get } from '@libs/core/decorators/parameters.decorator';
+import { SitesRootController } from './sites';
 
 export interface IController {
   // Where root will be loaded
-  setup(ctx?: hono.Context): any;
+  setup(): any;
 }
 
 @injectable()
 export class ControllerRoot implements IController {
   public constructor(
-    private readonly usersRootController: UsersRootController,
     private readonly authController: AuthController,
     private readonly notificationsController: NotificationsController,
+    private readonly sitesRootController: SitesRootController,
+    private readonly usersRootController: UsersRootController,
   ) { }
 
   public setup(): void {
     this.helloWorld();
     this.authController.setup();
     this.notificationsController.setup();
+    this.sitesRootController.setup();
     this.usersRootController.setup();
-    this.test();
-  }
-
-  @Get({
-    path: '/cc',
-    responses: {},
-  })
-  public test(ctx?: hono.Context): unknown {
-    if (ctx) {
-      return ctx.json({
-        salut: 'mathys',
-      });
-    }
   }
 
   @Get({

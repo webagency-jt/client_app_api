@@ -12,7 +12,7 @@ export function guardHandler<T extends GuardAbstract = any>(guards: GuardsType[]
   }
 }
 function createFunctionParameters() {
-  return (guard: GuardsType[]) => {
+  return (...guard: GuardsType[]) => {
     return (target: any, propertyKey: string, descriptor: PropertyDescriptor): void | TypedPropertyDescriptor<any> => {
       const original = target[propertyKey];
       Reflect.defineMetadata(GUARD, guard, original);
@@ -26,4 +26,4 @@ function createFunctionParameters() {
   };
 }
 
-export const Guard = createFunctionParameters();
+export const Guards = createFunctionParameters();

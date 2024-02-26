@@ -38,4 +38,16 @@ export class SitesRepository {
     }
   }
 
+  public async findUnique(siteId: string): Promise<Sites | null> {
+    try {
+      return this.orm.client.sites.findUnique({
+        where: {
+          id: siteId,
+        },
+      });
+    } catch (e: unknown) {
+      throw e;
+    }
+  }
+
 }

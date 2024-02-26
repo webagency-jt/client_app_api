@@ -1,6 +1,23 @@
+import { Prisma, Sites } from '@prisma/client';
 import { injectable } from 'inversify';
+import { SitesRepository } from './sites.repository';
 
 @injectable()
 export class SitesService {
 
+  constructor(
+    private readonly sitesRepository: SitesRepository,
+  ) { }
+
+  public async create(site: Prisma.SitesUncheckedCreateInput): Promise<Sites> {
+    return this.sitesRepository.create(site);
+  }
+
+  public async update(site: Prisma.SitesUncheckedUpdateInput): Promise<Sites> {
+    return this.sitesRepository.update(site);
+  }
+
+  public async get(siteId: string): Promise<Sites | null> {
+    return this.sitesRepository.findUnique(siteId);
+  }
 }
