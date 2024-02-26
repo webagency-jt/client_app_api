@@ -6,6 +6,7 @@ import { UserSettingsService } from '@libs/user/modules/user-settings/user-setti
 import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { Patch } from '@libs/core/decorators/parameters.decorator';
+import { AuthorizationSchema } from '@libs/schemas/header.schema';
 
 @injectable()
 export class UserSettingsController implements IController {
@@ -21,6 +22,7 @@ export class UserSettingsController implements IController {
   @Patch({
     path: '/users/settings',
     request: {
+      headers: AuthorizationSchema,
       body: {
         content: {
           'application/json': {

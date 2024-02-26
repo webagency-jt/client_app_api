@@ -5,6 +5,7 @@ import * as hono from 'hono';
 import { isContextDefined } from '@libs/core/helpers/context';
 import { UserUsername, userUsernameSchema } from '@libs/schemas/user-email.schema';
 import { Post } from '@libs/core/decorators/parameters.decorator';
+import { AuthorizationSchema } from '@libs/schemas/header.schema';
 
 // Lien de la documentation de openapi validation: https://github.com/asteasolutions/zod-to-openapi#defining-custom-components
 @injectable()
@@ -21,6 +22,7 @@ export class UserController implements IController {
   @Post({
     path: '/users/exist',
     request: {
+      headers: AuthorizationSchema,
       body: {
         content: {
           'application/json': {

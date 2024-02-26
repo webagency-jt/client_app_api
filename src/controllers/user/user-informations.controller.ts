@@ -10,6 +10,7 @@ import { z } from '@hono/zod-openapi';
 import { Guard } from '@libs/core/decorators/guard.decorator';
 import { AdminGuard } from '@libs/guards/admin.guard';
 import { Post, Get, Put } from '@libs/core/decorators/parameters.decorator';
+import { AuthorizationSchema } from '@libs/schemas/header.schema';
 
 @injectable()
 export class UserInformationsController implements IController {
@@ -27,6 +28,7 @@ export class UserInformationsController implements IController {
   @Post({
     path: '/users/informations',
     request: {
+      headers: AuthorizationSchema,
       body: {
         content: {
           'application/json': {
@@ -59,6 +61,7 @@ export class UserInformationsController implements IController {
   @Get({
     path: '/users/informations/{userId}',
     request: {
+      headers: AuthorizationSchema,
       params: z.object({
         userId: z.string(),
       }),
@@ -88,9 +91,7 @@ export class UserInformationsController implements IController {
     secureRoute: true,
     path: '/users/informations',
     request: {
-      headers: z.object({
-        'Authorization': z.unknown(),
-      }),
+      headers: AuthorizationSchema,
       body: {
         content: {
           'application/json': {
