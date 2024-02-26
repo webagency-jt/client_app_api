@@ -4,7 +4,7 @@ export const AuthorizationSchema = OpenapiFactory.generateSchema({
   params: [
     {
       required: true,
-      type: 'string',
+      type: 'any',
       example: 'Bearer token...',
       name: 'Authorization',
     },
