@@ -2,7 +2,7 @@ import * as hono from 'hono';
 import { App } from '@libs/core/server/server';
 import { IController } from '..';
 import { injectable } from 'inversify';
-import { isContextDefined } from '@libs/core/helpers/context';
+import { isContextDefined } from '@libs/core/helpers/context.helper';
 import { z } from 'zod';
 import { JwtMiddleware } from '@libs/core/middlewares/jwt.middleware';
 import { Get } from '@libs/core/decorators/parameters.decorator';

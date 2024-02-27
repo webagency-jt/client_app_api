@@ -1,7 +1,7 @@
 import * as hono from 'hono';
 import { NotificationsController } from './notifications/notifications.controller';
 import { injectable } from 'inversify';
-import { isContextDefined } from '@libs/core/helpers/context';
+import { isContextDefined } from '@libs/core/helpers/context.helper';
 import { AuthController } from './auth/auth.controller';
 import { UsersRootController } from './user';
 import { Get } from '@libs/core/decorators/parameters.decorator';
