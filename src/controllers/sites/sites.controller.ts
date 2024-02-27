@@ -1,9 +1,9 @@
 import * as hono from 'hono';
 import { IController } from '..';
-import { Get, Post, Put } from '@libs/core/decorators/parameters.decorator';
+import { Delete, Get, Post, Put } from '@libs/core/decorators/parameters.decorator';
 import { SitesService } from '@libs/sites/sites.service';
 import { injectable } from 'inversify';
-import { isContextDefined } from '@libs/core/helpers/context';
+import { isContextDefined } from '@libs/core/helpers/context.helper';
 import { Prisma } from '@prisma/client';
 import { Guards } from '@libs/core/decorators/guard.decorator';
 import { AdminGuard } from '@libs/guards/admin.guard';
@@ -19,7 +19,9 @@ export class SitesController implements IController {
 
   public setup(): void {
     this.createSites();
+    this.deleteSite();
     this.getSite();
+    this.getSites();
     this.updateSites();
   }
 
@@ -82,7 +84,44 @@ export class SitesController implements IController {
     isContextDefined(ctx);
     if (ctx) {
       const { sitesId } = ctx.req.param();
-      const siteFound = await this.sitesService.get(sitesId);
+      const siteFound = await this.sitesService.findUnique(sitesId);
+      return ctx.json(siteFound);
+    };
+  }
+
+  @Get({
+    path: '/sites',
+    request: {
+      headers: AuthorizationSchema,
+    },
+    responses: {},
+  })
+  @Guards(AdminGuard)
+  private async getSites(ctx?: hono.Context) {
+    isContextDefined(ctx);
+    if (ctx) {
+      const { skip, take } = ctx.req.query();
+      const siteFound = await this.sitesService.get({
+        skip: +skip,
+        take: +take,
+      });
+      return ctx.json(siteFound);
+    };
+  }
+
+  @Delete({
+    path: '/sites/{sitesId}',
+    request: {
+      headers: AuthorizationSchema,
+    },
+    responses: {},
+  })
+  @Guards(AdminGuard)
+  private async deleteSite(ctx?: hono.Context) {
+    isContextDefined(ctx);
+    if (ctx) {
+      const { sitesId } = ctx.req.param();
+      const siteFound = await this.sitesService.delete(sitesId);
       return ctx.json(siteFound);
     };
   }
