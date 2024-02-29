@@ -2,8 +2,8 @@ import { IController } from '..';
 import { injectable } from 'inversify';
 import { UserService } from '@libs/user/user.service';
 import * as hono from 'hono';
-import { isContextDefined } from '@libs/core/helpers/context';
-import { UserUsername, userUsernameSchema } from '@libs/schemas/user-email.schema';
+import { isContextDefined } from '@libs/core/helpers/context.helper';
+import { UserUsername, userUsernameSchema } from '@libs/schemas/username.schema';
 import { Get, Post } from '@libs/core/decorators/parameters.decorator';
 import { AuthorizationSchema } from '@libs/schemas/header.schema';
 
@@ -22,6 +22,7 @@ export class UserController implements IController {
 
   @Get({
     path: '/users/me',
+    secureRoute: true,
     request: {
       headers: AuthorizationSchema,
     },
@@ -57,5 +58,4 @@ export class UserController implements IController {
       return ctx.json({ userExist });
     };
   }
-
 }

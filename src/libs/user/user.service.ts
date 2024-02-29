@@ -1,15 +1,15 @@
 import Bun from 'bun';
 import { Config } from '@config/config';
-import { HttpErrors } from '@libs/errors/https-errors';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { UserRepository } from './user.repository';
-import { injectable } from 'inversify';
-import { UserUsername } from '@libs/schemas/user-email.schema';
-import { exclude } from './user.util';
-import { sign } from 'hono/jwt';
-import { Prisma } from '@prisma/client';
-import { UserLoginInput, UserWithoutPassword } from './user.interface';
 import { EnvEnum } from '@config/enums/env.enum';
+import { HttpErrors } from '@libs/errors/https-errors';
+import { Prisma } from '@prisma/client';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { UserLoginInput, UserWithoutPassword } from './user.interface';
+import { UserRepository } from './user.repository';
+import { UserUsername } from '@libs/schemas/username.schema';
+import { exclude } from './user.util';
+import { injectable } from 'inversify';
+import { sign } from 'hono/jwt';
 
 @injectable()
 export class UserService {

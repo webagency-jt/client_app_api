@@ -1,30 +1,12 @@
-import { GUARD, PATH_METADATA, SERVER, SERVER_TARGET } from '../constant';
-import { RequestMethod } from '../enums/request-method';
 import { App } from '../server/server';
-import { createRoute } from '@hono/zod-openapi';
-import { User } from '@prisma/client';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { RouteParameters } from '../types/custom-hono-zod';
-import { guardHandler } from './guard.decorator';
+import { GUARD, PATH_METADATA, SERVER, SERVER_TARGET } from '../constant';
 import { GuardsType } from '../guards/guard.type';
-import { HttpErrors } from '@libs/errors/https-errors';
-import { serializeRoutePath } from '../utils/utils';
-
-async function secureRouteHandler(ctx: any, route: any) {
-  // TODO: see if there is a better option than doing the following
-  const userJwt = ctx.get('jwtPayload') as User;
-  let userId: string;
-  if (route.path === 'get') {
-    const params = ctx.req.param() as { userId: string; };
-    userId = params?.userId;
-  } else {
-    const body = await ctx.req.json();
-    userId = body?.userId;
-  }
-  if (userJwt.id !== userId) {
-    throw new HttpErrors(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
-  }
-}
+import { RequestMethod } from '../enums/request-method';
+import { RouteParameters } from '../types/custom-hono-zod';
+import { StatusCodes } from 'http-status-codes';
+import { checkAuthorizationRoute } from '../helpers/authorization.helper';
+import { createRoute } from '@hono/zod-openapi';
+import { guardMiddleware } from '../middlewares/guards.middleware';
 
 function controllerHandler(options: RouteParameters, requestType: RequestMethod, target: any, guards: GuardsType[], thisArg: any) {
   const server: App = Reflect.getMetadata(SERVER, SERVER_TARGET);
@@ -36,14 +18,12 @@ function controllerHandler(options: RouteParameters, requestType: RequestMethod,
   const route = createRoute(finalRouteMetadata);
 
   if (guards && guards.length > 0) {
-    server.hono.use(serializeRoutePath(finalRouteMetadata.path), async (ctx, next) => {
-      guardHandler(guards, ctx);
-      await next();
-    });
+    guardMiddleware(guards, requestType, finalRouteMetadata.path);
   }
+
   const openapi = server.hono.openapi(route, async (ctx) => {
     if (secureRoute) {
-      await secureRouteHandler(ctx, route);
+      await checkAuthorizationRoute(ctx, route);
     }
     return target.call(thisArg, ctx);
   }, (result, c) => {
