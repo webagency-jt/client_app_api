@@ -27,6 +27,7 @@ export class SitesController implements IController {
 
   @Post({
     path: '/sites',
+    tags: ['Sites'],
     request: {
       headers: AuthorizationSchema,
       body: {
@@ -51,6 +52,7 @@ export class SitesController implements IController {
 
   @Put({
     path: '/sites',
+    tags: ['Sites'],
     request: {
       headers: AuthorizationSchema,
       body: {
@@ -75,6 +77,7 @@ export class SitesController implements IController {
 
   @Get({
     path: '/sites/{sitesId}',
+    tags: ['Sites'],
     request: {
       headers: AuthorizationSchema,
     },
@@ -91,6 +94,7 @@ export class SitesController implements IController {
 
   @Get({
     path: '/sites',
+    tags: ['Sites'],
     request: {
       headers: AuthorizationSchema,
     },
@@ -111,6 +115,7 @@ export class SitesController implements IController {
 
   @Delete({
     path: '/sites/{sitesId}',
+    tags: ['Sites'],
     request: {
       headers: AuthorizationSchema,
     },

@@ -20,6 +20,7 @@ export class UserSettingsController implements IController {
 
   @Patch({
     path: '/users/settings',
+    tags: ['Users Settings'],
     secureRoute: true,
     request: {
       headers: AuthorizationSchema,

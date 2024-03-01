@@ -24,6 +24,7 @@ export class NotificationsController implements IController {
 
   @Get({
     path: '/notifications',
+    tags: ['Notifications'],
     responses: {
       200: {
         description: 'Respond a message',

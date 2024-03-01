@@ -25,6 +25,7 @@ export class UserInformationsController implements IController {
 
   @Post({
     path: '/users/informations',
+    tags: ['Users Informations'],
     request: {
       headers: AuthorizationSchema,
       body: {
@@ -58,6 +59,7 @@ export class UserInformationsController implements IController {
 
   @Get({
     path: '/users/informations/{userId}',
+    tags: ['Users Informations'],
     secureRoute: true,
     request: {
       headers: AuthorizationSchema,
@@ -87,6 +89,7 @@ export class UserInformationsController implements IController {
 
   @Put({
     path: '/users/informations',
+    tags: ['Users Informations'],
     secureRoute: true,
     request: {
       headers: AuthorizationSchema,

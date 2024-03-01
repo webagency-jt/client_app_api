@@ -22,6 +22,7 @@ export class UserController implements IController {
 
   @Get({
     path: '/users/me',
+    tags: ['Users'],
     secureRoute: true,
     request: {
       headers: AuthorizationSchema,
@@ -38,6 +39,7 @@ export class UserController implements IController {
 
   @Post({
     path: '/users/exist',
+    tags: ['Users'],
     request: {
       headers: AuthorizationSchema,
       body: {

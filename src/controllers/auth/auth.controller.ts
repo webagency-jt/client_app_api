@@ -24,6 +24,7 @@ export class AuthController implements IController {
 
   @Post({
     path: '/auth/register',
+    tags: ['Auth'],
     request: {
       body: {
         content: {
@@ -68,6 +69,7 @@ export class AuthController implements IController {
 
   @Post({
     path: '/auth/login',
+    tags: ['Auth'],
     request: {
       body: {
         content: {
