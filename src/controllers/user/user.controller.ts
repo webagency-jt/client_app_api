@@ -23,7 +23,6 @@ export class UserController implements IController {
   @Get({
     path: '/users/me',
     tags: ['Users'],
-    secureRoute: true,
     request: {
       headers: AuthorizationSchema,
     },
