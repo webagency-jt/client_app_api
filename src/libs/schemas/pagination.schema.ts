@@ -6,12 +6,12 @@ export const PaginationSchema = OpenapiFactory.generateSchema<IPagination>({
     params: [
         {
             required: true,
-            type: 'number',
+            type: 'string',
             name: 'skip',
         },
         {
             required: true,
-            type: 'number',
+            type: 'string',
             name: 'take',
         },
     ],
