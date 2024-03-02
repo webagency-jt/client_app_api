@@ -63,9 +63,12 @@ export class SitesRepository {
     }
   }
 
-  public async findMany(pagination: IPagination): Promise<Sites[] | null> {
+  public async findMany(userId: string, pagination: IPagination): Promise<Sites[] | null> {
     try {
       return this.orm.client.sites.findMany({
+        where: {
+          userId
+        },
         skip: pagination.skip,
         take: pagination.take,
       });

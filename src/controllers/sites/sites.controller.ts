@@ -4,11 +4,12 @@ import { Delete, Get, Post, Put } from '@libs/core/decorators/parameters.decorat
 import { SitesService } from '@libs/sites/sites.service';
 import { injectable } from 'inversify';
 import { isContextDefined } from '@libs/core/helpers/context.helper';
-import { Prisma } from '@prisma/client';
+import {Prisma, User} from '@prisma/client';
 import { Guards } from '@libs/core/decorators/guard.decorator';
 import { AdminGuard } from '@libs/guards/admin.guard';
 import { AuthorizationSchema } from '@libs/schemas/header.schema';
 import { SitesInputSchema } from '@libs/sites/sites.schema';
+import {PaginationSchema} from "@libs/schemas/pagination.schema.ts";
 
 @injectable()
 export class SitesController implements IController {
@@ -97,15 +98,16 @@ export class SitesController implements IController {
     tags: ['Sites'],
     request: {
       headers: AuthorizationSchema,
+      query: PaginationSchema,
     },
     responses: {},
   })
-  @Guards(AdminGuard)
   private async getSites(ctx?: hono.Context) {
     isContextDefined(ctx);
     if (ctx) {
       const { skip, take } = ctx.req.query();
-      const siteFound = await this.sitesService.get({
+      const user: User = ctx.get('jwtPayload');
+      const siteFound = await this.sitesService.get(user.id,{
         skip: +skip,
         take: +take,
       });

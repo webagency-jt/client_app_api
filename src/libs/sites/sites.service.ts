@@ -26,7 +26,7 @@ export class SitesService {
     return this.sitesRepository.deleteOne(siteId);
   }
 
-  public async get(pagination: IPagination): Promise<Sites[] | null> {
-    return this.sitesRepository.findMany(pagination);
+  public async get(userId: string, pagination: IPagination): Promise<Sites[] | null> {
+    return this.sitesRepository.findMany(userId, pagination);
   }
 }
