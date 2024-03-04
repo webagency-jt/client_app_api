@@ -63,6 +63,7 @@ model UserInformations {
 model Sites {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   link          String
+  name          String
   documents     Documents[]
   interventions Interventions[]
   solutions     Solutions[]
