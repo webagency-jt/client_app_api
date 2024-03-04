@@ -12,7 +12,7 @@ describe('App', () => {
   });
 
   it('Should initialize hono', () => {
-    const app = container.get<App>();
+    const app = container.get(App);
     expect(app.hono).toBeDefined();
   });
 });

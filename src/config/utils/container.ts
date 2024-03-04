@@ -20,6 +20,8 @@ import { JwtMiddleware } from '@libs/core/middlewares/jwt.middleware';
 import { SitesRepository } from '@libs/sites/sites.repository';
 import { SitesService } from '@libs/sites/sites.service';
 import { AdminGuard } from '@libs/guards/admin.guard';
+import { SitesController } from '@controller/sites/sites.controller';
+import { SitesRootController } from '@controller/sites';
 
 /**
  * learning scopes
@@ -72,6 +74,10 @@ export function bindContainer(container: Container): void {
   container.bind(UserSettingsController).toSelf()
     .inRequestScope();
   container.bind(UserInformationsController).toSelf()
+    .inRequestScope();
+  container.bind(SitesRootController).toSelf()
+    .inRequestScope();
+  container.bind(SitesController).toSelf()
     .inRequestScope();
   /* #endregion */
 }

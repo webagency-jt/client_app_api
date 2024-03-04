@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { UserCreateInputSchema, UserSchema, UserLoginInputSchema } from '@libs/user/user.schema';
 import { UserService } from '@libs/user/user.service';
 import { injectable } from 'inversify';
-import { isContextDefined } from '@libs/core/helpers/context';
+import { isContextDefined } from '@libs/core/helpers/context.helper';
 import { Prisma } from '@prisma/client';
 import { UserLoginInput } from '@libs/user/user.interface';
 import { Post } from '@libs/core/decorators/parameters.decorator';
@@ -24,6 +24,7 @@ export class AuthController implements IController {
 
   @Post({
     path: '/auth/register',
+    tags: ['Auth'],
     request: {
       body: {
         content: {
@@ -68,6 +69,7 @@ export class AuthController implements IController {
 
   @Post({
     path: '/auth/login',
+    tags: ['Auth'],
     request: {
       body: {
         content: {

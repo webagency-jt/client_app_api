@@ -7,7 +7,7 @@ type ZodRule = {
   functionParam?: any,
 };
 
-type ZodTypeEnum = 'enum' | 'string' | 'boolean' | 'number';
+type ZodTypeEnum = 'enum' | 'string' | 'boolean' | 'number' | 'any';
 
 type OpenapiParams<T, K extends EnumLike = {}> = {
   name: T,
@@ -66,6 +66,8 @@ export class OpenapiFactory {
     switch (type) {
       case 'boolean':
         return z.boolean();
+      case 'any':
+        return z.any();
       case 'enum':
         if (customEnum)
           return z.nativeEnum(customEnum);

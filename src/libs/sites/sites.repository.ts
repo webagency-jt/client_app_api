@@ -1,3 +1,4 @@
+import { IPagination } from '@libs/core/interfaces/pagination.interface';
 import { AppOrm } from '@libs/core/orm/orm';
 import { TypeguardUtils } from '@libs/utils/typeguard';
 import { Prisma, Sites } from '@prisma/client';
@@ -38,4 +39,41 @@ export class SitesRepository {
     }
   }
 
+  public async findUnique(siteId: string): Promise<Sites | null> {
+    try {
+      return this.orm.client.sites.findUnique({
+        where: {
+          id: siteId,
+        },
+      });
+    } catch (e: unknown) {
+      throw e;
+    }
+  }
+
+  public async deleteOne(siteId: string): Promise<Sites | null> {
+    try {
+      return this.orm.client.sites.delete({
+        where: {
+          id: siteId,
+        },
+      });
+    } catch (e: unknown) {
+      throw e;
+    }
+  }
+
+  public async findMany(userId: string, pagination: IPagination): Promise<Sites[] | null> {
+    try {
+      return this.orm.client.sites.findMany({
+        where: {
+          userId
+        },
+        skip: pagination.skip,
+        take: pagination.take,
+      });
+    } catch (e: unknown) {
+      throw e;
+    }
+  }
 }

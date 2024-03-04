@@ -5,10 +5,8 @@ import { StatusCodes } from 'http-status-codes';
 import { UserInformationsCreateInputSchema, UserInformationsSchema, UserInformationsUpdateInputSchema } from '@libs/user/modules/user-informations/user-informations.schema';
 import { UserInformationsService } from '@libs/user/modules/user-informations/user-informations.service';
 import { injectable } from 'inversify';
-import { isContextDefined } from '@libs/core/helpers/context';
+import { isContextDefined } from '@libs/core/helpers/context.helper';
 import { z } from '@hono/zod-openapi';
-import { Guard } from '@libs/core/decorators/guard.decorator';
-import { AdminGuard } from '@libs/guards/admin.guard';
 import { Post, Get, Put } from '@libs/core/decorators/parameters.decorator';
 import { AuthorizationSchema } from '@libs/schemas/header.schema';
 
@@ -27,6 +25,7 @@ export class UserInformationsController implements IController {
 
   @Post({
     path: '/users/informations',
+    tags: ['Users Informations'],
     request: {
       headers: AuthorizationSchema,
       body: {
@@ -60,6 +59,8 @@ export class UserInformationsController implements IController {
 
   @Get({
     path: '/users/informations/{userId}',
+    tags: ['Users Informations'],
+    secureRoute: true,
     request: {
       headers: AuthorizationSchema,
       params: z.object({
@@ -77,7 +78,6 @@ export class UserInformationsController implements IController {
       },
     },
   })
-  @Guard([AdminGuard])
   private async getSettings(ctx?: hono.Context): Promise<unknown> {
     isContextDefined(ctx);
     if (ctx) {
@@ -88,8 +88,9 @@ export class UserInformationsController implements IController {
   }
 
   @Put({
-    secureRoute: true,
     path: '/users/informations',
+    tags: ['Users Informations'],
+    secureRoute: true,
     request: {
       headers: AuthorizationSchema,
       body: {
