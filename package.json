@@ -6,7 +6,8 @@
     "dev": "bun run --hot src/index.ts",
     "build": "bun run scripts/build.ts",
     "migrate:up": "bun migration-engine.ts up",
-    "migrate:down": "bun migration-engine.ts down",
+    "migrate:down": "bun migration-engine.ts down -l",
+    "migrate:status": "bun migration-engine.ts status",
     "migrate:create": "bun migration-engine.ts new --name"
   },
   "dependencies": {
