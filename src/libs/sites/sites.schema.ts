@@ -28,6 +28,11 @@ export const SitesSchema = OpenapiFactory.generateSchema<Sites>({
     {
       required: true,
       type: 'string',
+      name: 'name',
+    },
+    {
+      required: true,
+      type: 'string',
       name: 'userId',
     },
     {

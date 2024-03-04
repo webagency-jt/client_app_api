@@ -16,14 +16,14 @@ model User {
   settings      UserSettings?
   notifications Notifications?
   sites         Sites[]
-  //TODO ajouter created_At
+  created_at    DateTime
 }
 
 model Codes {
-  id   String   @id @default(auto()) @map("_id") @db.ObjectId
-  type CodeType @default(register)
-  code String
-  //TODO ajouter created_At
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  type       CodeType @default(register)
+  code       String
+  created_at DateTime
 }
 
 model UserSettings {
@@ -85,11 +85,11 @@ model SitesDetail {
 }
 
 model Documents {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  url     String
-  sitesId String @db.ObjectId
-  sites   Sites  @relation(fields: [sitesId], references: [id])
-  //TODO ajouter created_At
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  url        String
+  sitesId    String   @db.ObjectId
+  sites      Sites    @relation(fields: [sitesId], references: [id])
+  created_at DateTime
 }
 
 model Interventions {
