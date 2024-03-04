@@ -8,7 +8,7 @@ import { Prisma, User } from '@prisma/client';
 import { Guards } from '@libs/core/decorators/guard.decorator';
 import { AdminGuard } from '@libs/guards/admin.guard';
 import { AuthorizationSchema } from '@libs/schemas/header.schema';
-import { SitesInputSchema } from '@libs/sites/sites.schema';
+import {SitesInputSchema, SitesSchema} from '@libs/sites/sites.schema';
 import { PaginationSchema } from '@libs/schemas/pagination.schema.ts';
 
 @injectable()
@@ -100,7 +100,16 @@ export class SitesController implements IController {
       headers: AuthorizationSchema,
       query: PaginationSchema,
     },
-    responses: {},
+    responses: {
+      200: {
+        description: 'SitesSchema',
+        content: {
+          'application/json': {
+            schema: SitesSchema,
+          },
+        },
+      },
+    },
   })
   private async getSites(ctx?: hono.Context) {
     isContextDefined(ctx);

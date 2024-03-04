@@ -16,3 +16,24 @@ export const SitesInputSchema = OpenapiFactory.generateSchema<Sites>({
     },
   ],
 });
+
+export const SitesSchema = OpenapiFactory.generateSchema<Sites>({
+  schemaName: 'Sites',
+  params: [
+    {
+      required: true,
+      type: 'string',
+      name: 'id',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'userId',
+    },
+    {
+      required: true,
+      type: 'string',
+      name: 'link',
+    },
+  ],
+});
